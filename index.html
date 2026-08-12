@@ -280,6 +280,15 @@
   .status-dd-item.active-school{background:var(--highlight-dark);color:#fff;}
   .status-dd-item.active-urlaub{background:var(--success);color:#fff;}
   .status-dd-danger{color:var(--danger);border-top:1px solid var(--paper-line);margin-top:4px;padding-top:10px;border-radius:0 0 7px 7px;}
+  .status-dd-types{display:flex;gap:6px;padding:0 2px;}
+  .status-dd-type-btn{flex:1;text-align:center;background:var(--paper-2);border:1px solid var(--paper-line);color:var(--text-main);font-size:12px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;padding:8px 4px;border-radius:8px;}
+  .status-dd-type-btn.sel[data-type="krank"]{background:var(--danger);color:#fff;border-color:var(--danger);}
+  .status-dd-type-btn.sel[data-type="urlaub"]{background:var(--success);color:#fff;border-color:var(--success);}
+  .status-dd-type-btn.sel[data-type="schule"]{background:var(--highlight-dark);color:#fff;border-color:var(--highlight-dark);}
+  .status-dropdown .add-row{padding:0 2px;}
+  .status-dropdown .field input{width:100%;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:8px;padding:8px;color:var(--text-main);font-size:12.5px;}
+  .status-dd-primary{background:var(--accent);color:#fff;justify-content:center;text-align:center;font-weight:700;margin-top:2px;}
+  .status-dd-primary:hover{background:var(--accent);opacity:0.9;}
 
   .modal-overlay{display:none;position:fixed;inset:0;background:var(--overlay);align-items:center;justify-content:center;z-index:100;padding:20px;}
   .modal-overlay.open{display:flex;}
@@ -312,6 +321,8 @@
   .swatch{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;position:relative;}
   .swatch.active{border-color:var(--text-main);}
   .swatch.active::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,0.15);}
+  .accent-preview-row{display:flex;align-items:center;gap:12px;margin-top:12px;}
+  .accent-preview-chip{font-size:13px;font-weight:600;color:var(--accent-text);background:var(--accent-light);padding:8px 14px;border-radius:20px;}
   .btn-logout{width:100%;background:var(--danger-light);color:var(--danger);border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:600;}
   .btn-block{width:100%;background:var(--paper-2);border:1px solid var(--paper-line);color:var(--text-main);border-radius:10px;padding:11px;font-size:13px;font-weight:600;margin-bottom:8px;}
   .setting-hint{font-size:11px;color:var(--text-faint);margin-top:6px;}
@@ -420,13 +431,35 @@
   </div>
   <div class="login-card" id="loginCardSetup" style="display:none;">
     <p class="login-eyebrow">Statt Heft</p>
-    <h2 class="login-title" data-i18n="setupTitle">Konto einrichten</h2>
-    <p class="setting-desc" style="margin-top:-10px;" data-i18n="setupDesc">Lege einmalig deinen Benutzernamen und ein Passwort fest.</p>
-    <div class="login-field"><label for="setupUser" data-i18n="lblUsername">Benutzername</label><input type="text" id="setupUser" autocomplete="username"></div>
-    <div class="login-field"><label for="setupPass" data-i18n="lblPassword">Passwort</label><input type="password" id="setupPass" autocomplete="new-password"></div>
-    <div class="login-field"><label for="setupPass2" data-i18n="lblPasswordRepeat">Passwort wiederholen</label><input type="password" id="setupPass2" autocomplete="new-password"></div>
-    <button class="btn-login" id="setupSubmitBtn" data-i18n="btnCreateAccount">Konto anlegen</button>
-    <p class="login-error" id="setupError" data-i18n="setupError">Bitte Benutzernamen und ein Passwort (mind. 4 Zeichen) eingeben, beide Passw&ouml;rter m&uuml;ssen &uuml;bereinstimmen.</p>
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;" id="setupStepDots"></div>
+
+    <div class="setup-step" id="setupStepRole">
+      <h2 class="login-title" data-i18n="setupRoleTitle">Wer bist du?</h2>
+      <p class="setting-desc" style="margin-top:-10px;" data-i18n="setupRoleDesc">Damit passt sich die App an deinen Alltag an.</p>
+      <div class="login-field">
+        <div class="seg" id="setupRoleSeg"><button type="button" class="seg-btn active" data-role="azubi" data-i18n="roleAzubi">Azubi</button><button type="button" class="seg-btn" data-role="ma" data-i18n="roleMa">Mitarbeiter (MA)</button></div>
+      </div>
+      <button class="btn-login" id="setupRoleNextBtn" data-i18n="onboardingNext">Weiter</button>
+    </div>
+
+    <div class="setup-step" id="setupStepAccount" style="display:none;">
+      <h2 class="login-title" data-i18n="setupTitle">Konto einrichten</h2>
+      <p class="setting-desc" style="margin-top:-10px;" data-i18n="setupDesc">Lege einmalig deinen Benutzernamen und ein Passwort fest.</p>
+      <div class="login-field"><label for="setupUser" data-i18n="lblUsername">Benutzername</label><input type="text" id="setupUser" autocomplete="username"></div>
+      <div class="login-field"><label for="setupPass" data-i18n="lblPassword">Passwort</label><input type="password" id="setupPass" autocomplete="new-password"></div>
+      <div class="login-field"><label for="setupPass2" data-i18n="lblPasswordRepeat">Passwort wiederholen</label><input type="password" id="setupPass2" autocomplete="new-password"></div>
+      <button class="btn-login" id="setupAccountNextBtn" data-i18n="onboardingNext">Weiter</button>
+      <p class="login-error" id="setupError" data-i18n="setupError">Bitte Benutzernamen und ein Passwort (mind. 4 Zeichen) eingeben, beide Passw&ouml;rter m&uuml;ssen &uuml;bereinstimmen.</p>
+      <button type="button" class="btn-ghost" id="setupAccountBackBtn" style="width:100%;margin-top:6px;" data-i18n="btnBack">Zur&uuml;ck</button>
+    </div>
+
+    <div class="setup-step" id="setupStepLand" style="display:none;">
+      <h2 class="login-title" data-i18n="setupLandTitle">Bundesland</h2>
+      <p class="setting-desc" style="margin-top:-10px;" data-i18n="setupLandDesc">F&uuml;r die richtigen Feiertage in deinem Kalender.</p>
+      <div class="login-field"><select id="setupLandSelect" class="land-select"></select></div>
+      <button class="btn-login" id="setupSubmitBtn" data-i18n="btnCreateAccount">Konto anlegen</button>
+      <button type="button" class="btn-ghost" id="setupLandBackBtn" style="width:100%;margin-top:6px;" data-i18n="btnBack">Zur&uuml;ck</button>
+    </div>
   </div>
   <div class="login-card" id="loginCardPass">
     <p class="login-eyebrow">Statt Heft</p>
@@ -629,8 +662,8 @@
       <div class="view-head">
         <div><p class="view-title" data-i18n="calTitle">Kalender</p><p class="view-sub" data-i18n="calSub">Deine Termine im &Uuml;berblick.</p></div>
         <div class="status-menu-wrap">
-          <button type="button" class="today-btn" id="statusMenuBtn" aria-label="Heute" title="Heute">
-            <span class="today-btn-dot" id="todayBtnDot"></span><span data-i18n="btnToday">Heute</span>
+          <button type="button" class="today-btn" id="statusMenuBtn" aria-label="Status" title="Status">
+            <span class="today-btn-dot" id="todayBtnDot"></span><span data-i18n="btnToday">Status</span>
           </button>
           <div class="status-dropdown" id="statusDropdown">
             <div class="status-dd-info">
@@ -640,10 +673,18 @@
                 <p class="setting-hint" id="ausbildungCountdown"></p>
               </div>
             </div>
-            <button class="status-dd-item" id="sickBtn" data-i18n="btnSick">Krank melden</button>
-            <button class="status-dd-item" id="urlaubBtn" data-i18n="btnVacation">Urlaub melden</button>
-            <button class="status-dd-item" id="schoolBtn" data-i18n="btnSchool">Berufsschule melden</button>
-            <button class="status-dd-item status-dd-danger" id="clearAbsenceBtn" style="display:none;" data-i18n="btnClearToday">Heutigen Eintrag l&ouml;schen</button>
+            <div class="status-dd-types">
+              <button type="button" class="status-dd-type-btn" data-type="krank" id="typeKrankBtn" data-i18n="btnSickShort">Krank</button>
+              <button type="button" class="status-dd-type-btn" data-type="urlaub" id="typeUrlaubBtn" data-i18n="btnVacationShort">Urlaub</button>
+              <button type="button" class="status-dd-type-btn" id="typeSchuleBtn" data-type="schule" data-i18n="btnSchoolShort">Schule</button>
+            </div>
+            <div class="add-row" style="margin:8px 0 4px;">
+              <div class="field"><span class="field-label" data-i18n="lblFrom">Von</span><input type="date" id="absFromInput"></div>
+              <div class="field"><span class="field-label" data-i18n="lblTo">Bis</span><input type="date" id="absToInput"></div>
+            </div>
+            <p class="setting-hint" data-i18n="absenceRangeDesc" style="margin:0 0 8px;">W&auml;hle den Zeitraum &mdash; alle Tage dazwischen werden im Kalender markiert.</p>
+            <button type="button" class="status-dd-item status-dd-primary" id="reportRangeBtn" data-i18n="btnReport">Melden</button>
+            <button type="button" class="status-dd-item status-dd-danger" id="clearAbsenceBtn" style="display:none;" data-i18n="btnClearRange">Eintrag im Zeitraum l&ouml;schen</button>
           </div>
         </div>
       </div>
@@ -654,7 +695,7 @@
           <button class="cal-nav" id="calNext">&rarr;</button>
         </div>
         <div class="cal-grid" id="calGrid"></div>
-        <p class="setting-hint">Samstag, Sonntag und Feiertage in Mecklenburg-Vorpommern sind hell rot markiert.</p>
+        <p class="setting-hint" id="calHolidayHint">Samstag, Sonntag und Feiertage in Mecklenburg-Vorpommern sind hell rot markiert.</p>
         <button class="btn-secondary" id="notifyBtn" style="margin-top:10px;" data-i18n="btnEnableNotify">Erinnerungen f&uuml;r Termine aktivieren</button>
       </div>
 
@@ -848,6 +889,10 @@
           <button class="seg-btn" data-theme="auto" data-i18n="themeAuto">Zeitgesteuert</button>
         </div>
         <p class="setting-hint">Zeitgesteuert: ab 19 Uhr abends automatisch dunkel, tags&uuml;ber hell.</p>
+        <div class="add-row" id="autoThemeTimes" style="display:none;margin-top:8px;">
+          <div class="field"><span class="field-label" data-i18n="lblAutoThemeFrom">Dunkel ab</span><input type="time" id="autoThemeFromInput"></div>
+          <div class="field"><span class="field-label" data-i18n="lblAutoThemeTo">Hell ab</span><input type="time" id="autoThemeToInput"></div>
+        </div>
       </div>
       <div class="setting-group">
         <div class="setting-label" data-i18n="settingAccent">Akzentfarbe</div>
@@ -857,6 +902,10 @@
           <div class="swatch" data-accent="green" style="background:#1d9e75"></div>
           <div class="swatch" data-accent="coral" style="background:#d85a30"></div>
           <div class="swatch" data-accent="pink" style="background:#d4537e"></div>
+        </div>
+        <div class="accent-preview-row" id="accentPreviewRow">
+          <button type="button" class="btn-add" style="flex:0 0 auto;padding:8px 16px;" data-i18n="accentPreviewBtn">Vorschau</button>
+          <span class="accent-preview-chip" data-i18n="accentPreviewChip">Beispieltext</span>
         </div>
       </div>
       <div class="setting-group">
@@ -901,6 +950,11 @@
           <input type="text" inputmode="numeric" id="vacationDaysInput" style="max-width:80px;" value="24">
           <button class="btn-secondary" id="vacationDaysSaveBtn" data-i18n="btnSave">Speichern</button>
         </div>
+      </div>
+      <div class="setting-group">
+        <div class="setting-label" data-i18n="settingBundesland">Bundesland</div>
+        <select id="bundeslandSelect" class="land-select"></select>
+        <p class="setting-hint" data-i18n="settingBundeslandHint">Bestimmt, welche Feiertage im Kalender markiert werden.</p>
       </div>
       <div class="setting-group" style="margin-bottom:0;">
         <div class="setting-label" data-i18n="settingUrgentReminder">Erinnerung f&uuml;r dringende Aufgaben</div>
@@ -1025,7 +1079,7 @@ let toastTimer = null;
 let lastAction = null;
 
 const defaultSettings = { theme:'dark', accent:'blue', density:'comfortable', sortDone:'bottom', lastBackupAt:null, urgentReminderHours:4, fontSize:'normal', lang:'de', weatherSkin:'on',
-  role:'azubi', ausbildungBeginn:null, vacationDaysPerYear:24, berichtsheftDismissedWeek:null,
+  role:'azubi', ausbildungBeginn:null, vacationDaysPerYear:24, berichtsheftDismissedWeek:null, bundesland:'MV', autoThemeFrom:'19:00', autoThemeTo:'07:00',
   workHours: { mon:{start:'07:30',end:'16:30'}, tue:{start:'07:30',end:'16:30'}, wed:{start:'07:30',end:'16:30'}, thu:{start:'07:30',end:'16:30'}, fri:{start:'07:30',end:'15:00'} } };
 const PRIORITY_META = {
   urgent:{ label:'Dringend & schnell', order:0, color:'var(--danger)' },
@@ -1050,6 +1104,7 @@ de: {
   bulkAddTitle:'Mehrere Aufgaben', lblPriorityAll:'Priorität für alle', btnAddAll:'Alle hinzufügen', btnEnter:'Eintragen', phChecklist:'Neuer Punkt...',
   settingsTitle:'Einstellungen', settingLanguage:'Sprache', settingTheme:'Darstellung', themeLight:'Hell', themeDark:'Dunkel', themeSystem:'System', themeAuto:'Zeitgesteuert',
   settingAccent:'Akzentfarbe', settingDensity:'Listendichte', densityComfortable:'Locker', densityCompact:'Kompakt',
+  lblAutoThemeFrom:'Dunkel ab', lblAutoThemeTo:'Hell ab', accentPreviewBtn:'Vorschau', accentPreviewChip:'Beispieltext',
   settingFontSize:'Textgröße', fontSmall:'Klein', fontNormal:'Normal', fontLarge:'Groß',
   settingSortDone:'Erledigte Aufgaben (in Liste)', sortBottom:'Ans Ende', sortMixed:'Normal einsortiert',
   settingWeatherSkin:'Wetter-Skin', weatherSkinOn:'An', weatherSkinOff:'Aus', weatherSkinHint:'Zeigt passend zum aktuellen Wetter an deinem Standort eine dezente Animation im Hintergrund (Regen, Schnee, Sonne, ...).',
@@ -1062,6 +1117,8 @@ de: {
   settingBackup:'Daten sichern', btnExportJson:'Als Datei exportieren (JSON)', btnExportCsv:'Als CSV exportieren (Excel)', btnImportJson:'Aus Datei importieren (JSON)',
   settingProfilePhoto:'Profilbild', btnChoosePhoto:'Bild auswählen', settingAccount:'Konto', btnLogout:'Abmelden',
   setupTitle:'Konto einrichten', setupDesc:'Lege einmalig deinen Benutzernamen und ein Passwort fest.',
+  setupRoleTitle:'Wer bist du?', setupRoleDesc:'Damit passt sich die App an deinen Alltag an.',
+  setupLandTitle:'Bundesland', setupLandDesc:'F\u00fcr die richtigen Feiertage in deinem Kalender.', btnBack:'Zur\u00fcck',
   lblUsername:'Benutzername', lblPassword:'Passwort', lblPasswordRepeat:'Passwort wiederholen', btnCreateAccount:'Konto anlegen',
   setupError:'Bitte Benutzernamen und ein Passwort (mind. 4 Zeichen) eingeben, beide Passwörter müssen übereinstimmen.',
   loginTitle:'Anmelden', btnLogin:'Anmelden', btnBioLogin:'Mit Fingerabdruck / Face entsperren', loginError:'Benutzername oder Passwort falsch.',
@@ -1096,15 +1153,17 @@ de: {
   settingsCatWork:'Arbeit', settingsCatWorkSub:'Arbeitszeiten, Rolle, Urlaub, Erinnerungen',
   settingsCatData:'Daten', settingsCatDataSub:'Archivierung & Datensicherung',
   settingsCatAccount:'Konto', settingsCatAccountSub:'Anmeldung, Profilbild, Abmelden',
-  btnToday:'Heute', dayTomorrow:'Morgen',
+  btnToday:'Status', dayTomorrow:'Morgen',
   apptFormSectionTitle:'Termin hinzuf\u00fcgen', apptListTitle:'Anstehende Termine',
   lblDate:'Datum', lblType:'Typ', lblLinkTask:'Aufgabe verkn\u00fcpfen',
   emptyNoAppts:'Noch keine anstehenden Termine.', emptyChecklist:'Noch keine Punkte.',
   dashSub:'Dein \u00dcberblick f\u00fcr heute.', dashUpNext:'Als N\u00e4chstes dran', dashMoreUrgent:'+ {n} weitere dringende Aufgabe(n)',
-  btnClearToday:'Heutigen Eintrag l\u00f6schen',
+  btnClearToday:'Heutigen Eintrag l\u00f6schen', btnClearRange:'Eintrag im Zeitraum l\u00f6schen',
+  btnSickShort:'Krank', btnVacationShort:'Urlaub', btnSchoolShort:'Schule', btnReport:'Melden',
   toastSickReported:'Krank gemeldet', toastVacationReported:'Urlaub gemeldet', toastSchoolReported:'Berufsschule gemeldet',
   weekThis:'Diese Woche', ptsShort:'Pkt',
   vacationInfoTemplate:'Urlaub dieses Jahr: {used} von {total} Tagen genommen ({left} \u00fcbrig)',
+  calHolidayHintTemplate:'Samstag, Sonntag und Feiertage in {land} sind hell rot markiert.', settingBundesland:'Bundesland', settingBundeslandHint:'Bestimmt, welche Feiertage im Kalender markiert werden.',
   ausbildungCountdownTemplate:'Noch {days} Tage bis Ausbildungsende ({date}).',
   ausbildungOverdue:'Deine Ausbildung sollte laut Datum bereits vorbei sein \u2013 evtl. in den Einstellungen auf "Mitarbeiter" umstellen?',
   ausbildungNoDate:'Trag dein Ausbildungsbeginn-Datum in den Einstellungen ein f\u00fcr einen Countdown.',
@@ -1138,6 +1197,7 @@ en: {
   bulkAddTitle:'Multiple tasks', lblPriorityAll:'Priority for all', btnAddAll:'Add all', btnEnter:'Save', phChecklist:'New item...',
   settingsTitle:'Settings', settingLanguage:'Language', settingTheme:'Appearance', themeLight:'Light', themeDark:'Dark', themeSystem:'System', themeAuto:'Time-based',
   settingAccent:'Accent color', settingDensity:'List density', densityComfortable:'Comfortable', densityCompact:'Compact',
+  lblAutoThemeFrom:'Dark from', lblAutoThemeTo:'Light from', accentPreviewBtn:'Preview', accentPreviewChip:'Sample text',
   settingFontSize:'Text size', fontSmall:'Small', fontNormal:'Normal', fontLarge:'Large',
   settingSortDone:'Completed tasks (in list)', sortBottom:'Move to bottom', sortMixed:'Keep in place',
   settingWeatherSkin:'Weather skin', weatherSkinOn:'On', weatherSkinOff:'Off', weatherSkinHint:'Shows a subtle background animation matching the current weather at your location (rain, snow, sun, ...).',
@@ -1150,6 +1210,8 @@ en: {
   settingBackup:'Data backup', btnExportJson:'Export as file (JSON)', btnExportCsv:'Export as CSV (Excel)', btnImportJson:'Import from file (JSON)',
   settingProfilePhoto:'Profile photo', btnChoosePhoto:'Choose photo', settingAccount:'Account', btnLogout:'Log out',
   setupTitle:'Set up account', setupDesc:'Set your username and password once.',
+  setupRoleTitle:'Who are you?', setupRoleDesc:'This lets the app match your daily routine.',
+  setupLandTitle:'Federal state', setupLandDesc:'For the correct public holidays in your calendar.', btnBack:'Back',
   lblUsername:'Username', lblPassword:'Password', lblPasswordRepeat:'Repeat password', btnCreateAccount:'Create account',
   setupError:'Please enter a username and a password (min. 4 characters); both passwords must match.',
   loginTitle:'Log in', btnLogin:'Log in', btnBioLogin:'Unlock with fingerprint / Face ID', loginError:'Username or password incorrect.',
@@ -1184,15 +1246,17 @@ en: {
   settingsCatWork:'Work', settingsCatWorkSub:'Working hours, role, vacation, reminders',
   settingsCatData:'Data', settingsCatDataSub:'Archiving & backups',
   settingsCatAccount:'Account', settingsCatAccountSub:'Login, profile photo, sign out',
-  btnToday:'Today', dayTomorrow:'Tomorrow',
+  btnToday:'Status', dayTomorrow:'Tomorrow',
   apptFormSectionTitle:'Add appointment', apptListTitle:'Upcoming appointments',
   lblDate:'Date', lblType:'Type', lblLinkTask:'Link task',
   emptyNoAppts:'No upcoming appointments yet.', emptyChecklist:'No items yet.',
   dashSub:'Your overview for today.', dashUpNext:'Up next', dashMoreUrgent:'+ {n} more urgent task(s)',
-  btnClearToday:'Delete today\u2019s entry',
+  btnClearToday:'Delete today\u2019s entry', btnClearRange:'Delete entry in range',
+  btnSickShort:'Sick', btnVacationShort:'Vacation', btnSchoolShort:'School', btnReport:'Report',
   toastSickReported:'Reported sick', toastVacationReported:'Vacation reported', toastSchoolReported:'Vocational school reported',
   weekThis:'This week', ptsShort:'pts',
   vacationInfoTemplate:'Vacation this year: {used} of {total} days taken ({left} left)',
+  calHolidayHintTemplate:'Saturdays, Sundays and public holidays in {land} are highlighted in light red.', settingBundesland:'Federal state', settingBundeslandHint:'Determines which public holidays are highlighted in the calendar.',
   ausbildungCountdownTemplate:'{days} days left until the end of your apprenticeship ({date}).',
   ausbildungOverdue:'According to the date, your apprenticeship should already be over \u2013 maybe switch to "Employee" in settings?',
   ausbildungNoDate:'Enter your apprenticeship start date in settings for a countdown.',
@@ -1226,6 +1290,7 @@ fa: {
   bulkAddTitle:'چند وظیفه', lblPriorityAll:'اولویت برای همه', btnAddAll:'افزودن همه', btnEnter:'ثبت', phChecklist:'مورد جدید...',
   settingsTitle:'تنظیمات', settingLanguage:'زبان', settingTheme:'نمایش', themeLight:'روشن', themeDark:'تیره', themeSystem:'سیستم', themeAuto:'بر اساس زمان',
   settingAccent:'رنگ تاکیدی', settingDensity:'تراکم لیست', densityComfortable:'راحت', densityCompact:'فشرده',
+  lblAutoThemeFrom:'تیره از', lblAutoThemeTo:'روشن از', accentPreviewBtn:'پیش\u200cنمایش', accentPreviewChip:'متن نمونه',
   settingFontSize:'اندازه متن', fontSmall:'کوچک', fontNormal:'معمولی', fontLarge:'بزرگ',
   settingSortDone:'وظایف انجام‌شده (در لیست)', sortBottom:'به انتها', sortMixed:'در جای خود',
   settingWeatherSkin:'پوسته آب‌وهوا', weatherSkinOn:'روشن', weatherSkinOff:'خاموش', weatherSkinHint:'یک انیمیشن ملایم پس‌زمینه متناسب با آب‌وهوای فعلی در موقعیت شما نشان می‌دهد (باران، برف، آفتاب و ...).',
@@ -1237,7 +1302,9 @@ fa: {
   settingLogin:'ورود', btnSetupPin:'تنظیم / تغییر پین', btnSetupBio:'تنظیم اثر انگشت / Face ID', btnSaveCreds:'ذخیره اطلاعات ورود',
   settingBackup:'پشتیبان‌گیری', btnExportJson:'خروجی به فایل (JSON)', btnExportCsv:'خروجی CSV (Excel)', btnImportJson:'وارد کردن از فایل (JSON)',
   settingProfilePhoto:'عکس پروفایل', btnChoosePhoto:'انتخاب عکس', settingAccount:'حساب کاربری', btnLogout:'خروج',
-  setupTitle:'ایجاد حساب کاربری', setupDesc:'نام کاربری و رمز عبور خود را یک‌بار تنظیم کنید.',
+  setupTitle:'ایجاد حساب کاربری', setupDesc:'نام کاربری و رمز عبور خود را یک\u200cبار تنظیم کنید.',
+  setupRoleTitle:'شما چه کسی هستید؟', setupRoleDesc:'تا برنامه با روال روزانه شما هماهنگ شود.',
+  setupLandTitle:'ایالت', setupLandDesc:'برای نمایش تعطیلات رسمی درست در تقویم شما.', btnBack:'بازگشت',
   lblUsername:'نام کاربری', lblPassword:'رمز عبور', lblPasswordRepeat:'تکرار رمز عبور', btnCreateAccount:'ایجاد حساب',
   setupError:'لطفاً نام کاربری و رمز عبور (حداقل ۴ کاراکتر) را وارد کنید؛ هر دو رمز باید یکسان باشند.',
   loginTitle:'ورود', btnLogin:'ورود', btnBioLogin:'باز کردن با اثر انگشت / Face ID', loginError:'نام کاربری یا رمز عبور اشتباه است.',
@@ -1272,15 +1339,17 @@ fa: {
   settingsCatWork:'کار', settingsCatWorkSub:'ساعات کاری، نقش، مرخصی، یادآوری‌ها',
   settingsCatData:'داده‌ها', settingsCatDataSub:'بایگانی و پشتیبان‌گیری',
   settingsCatAccount:'حساب کاربری', settingsCatAccountSub:'ورود، عکس پروفایل، خروج',
-  btnToday:'امروز', dayTomorrow:'فردا',
+  btnToday:'وضعیت', dayTomorrow:'فردا',
   apptFormSectionTitle:'افزودن قرار ملاقات', apptListTitle:'قرارهای پیش رو',
   lblDate:'تاریخ', lblType:'نوع', lblLinkTask:'اتصال به وظیفه',
   emptyNoAppts:'هنوز قرار ملاقاتی وجود ندارد.', emptyChecklist:'هنوز موردی نیست.',
   dashSub:'نمای کلی امروز شما.', dashUpNext:'در ادامه', dashMoreUrgent:'+ {n} کار فوری دیگر',
-  btnClearToday:'حذف ثبت امروز',
+  btnClearToday:'حذف ثبت امروز', btnClearRange:'حذف ثبت در این بازه',
+  btnSickShort:'بیمار', btnVacationShort:'مرخصی', btnSchoolShort:'مدرسه', btnReport:'ثبت',
   toastSickReported:'گزارش بیماری ثبت شد', toastVacationReported:'مرخصی ثبت شد', toastSchoolReported:'مدرسه حرفه‌ای ثبت شد',
   weekThis:'این هفته', ptsShort:'امتیاز',
-  vacationInfoTemplate:'مرخصی امسال: {used} از {total} روز استفاده شده ({left} باقی‌مانده)',
+  vacationInfoTemplate:'مرخصی امسال: {used} از {total} روز استفاده شده ({left} باقی\u200cمانده)',
+  calHolidayHintTemplate:'شنبه، یکشنبه و تعطیلات رسمی در {land} با رنگ قرمز روشن مشخص شده\u200cاند.', settingBundesland:'ایالت', settingBundeslandHint:'مشخص می\u200cکند کدام تعطیلات رسمی در تقویم نشان داده شوند.',
   ausbildungCountdownTemplate:'{days} روز تا پایان دوره کارآموزی باقی مانده است ({date}).',
   ausbildungOverdue:'طبق تاریخ، دوره کارآموزی شما باید قبلاً تمام شده باشد – شاید در تنظیمات به «کارمند» تغییر دهید؟',
   ausbildungNoDate:'برای شمارش معکوس، تاریخ شروع کارآموزی خود را در تنظیمات وارد کنید.',
@@ -1321,7 +1390,7 @@ function getAuth(){
 }
 function hasAccount(){ return !!getAuth(); }
 
-/* ---------- MV Feiertage ---------- */
+/* ---------- Feiertage je Bundesland ---------- */
 function easterSunday(year){
   const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),
         g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,
@@ -1330,14 +1399,37 @@ function easterSunday(year){
 }
 function addDays(date, n){ const d = new Date(date); d.setDate(d.getDate()+n); return d; }
 function fmtDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function mvHolidays(year){
+const BUNDESLAENDER = [
+  {code:'BW', name:'Baden-W\u00fcrttemberg'}, {code:'BY', name:'Bayern'}, {code:'BE', name:'Berlin'},
+  {code:'BB', name:'Brandenburg'}, {code:'HB', name:'Bremen'}, {code:'HH', name:'Hamburg'},
+  {code:'HE', name:'Hessen'}, {code:'MV', name:'Mecklenburg-Vorpommern'}, {code:'NI', name:'Niedersachsen'},
+  {code:'NW', name:'Nordrhein-Westfalen'}, {code:'RP', name:'Rheinland-Pfalz'}, {code:'SL', name:'Saarland'},
+  {code:'SN', name:'Sachsen'}, {code:'ST', name:'Sachsen-Anhalt'}, {code:'SH', name:'Schleswig-Holstein'}, {code:'TH', name:'Th\u00fcringen'}
+];
+function bundeslandName(code){ const b = BUNDESLAENDER.find(x=>x.code===code); return b ? b.name : code; }
+const HOLIDAY_RULES_FIXED = {
+  '01-01': 'all', '01-06': ['BW','BY','ST'], '03-08': ['BE','MV'], '05-01': 'all', '08-15': ['SL'],
+  '10-03': 'all', '09-20': ['TH'], '10-31': ['BB','HB','HH','MV','NI','SN','ST','SH','TH'],
+  '11-01': ['BW','BY','NW','RP','SL'], '12-25': 'all', '12-26': 'all'
+};
+const HOLIDAY_RULES_EASTER = { '-2':'all', '1':'all', '39':'all', '50':'all', '60':['BW','BY','HE','NW','RP','SL'] };
+function bussUndBettag(year){
+  for(let d=16; d<=22; d++){ const dt = new Date(year,10,d); if(dt.getDay()===3) return dt; }
+}
+function stateHolidays(year, state){
   const easter = easterSunday(year);
-  return new Set([
-    fmtDate(new Date(year,0,1)), fmtDate(addDays(easter,-2)), fmtDate(addDays(easter,1)),
-    fmtDate(new Date(year,4,1)), fmtDate(addDays(easter,39)), fmtDate(addDays(easter,50)),
-    fmtDate(new Date(year,9,3)), fmtDate(new Date(year,8,20)), fmtDate(new Date(year,9,31)),
-    fmtDate(new Date(year,11,25)), fmtDate(new Date(year,11,26))
-  ]);
+  const inState = list => list === 'all' || (Array.isArray(list) && list.includes(state));
+  const set = new Set();
+  Object.entries(HOLIDAY_RULES_FIXED).forEach(([md, list])=>{
+    if(!inState(list)) return;
+    const [mm,dd] = md.split('-').map(Number);
+    set.add(fmtDate(new Date(year, mm-1, dd)));
+  });
+  Object.entries(HOLIDAY_RULES_EASTER).forEach(([off, list])=>{
+    if(inState(list)) set.add(fmtDate(addDays(easter, parseInt(off,10))));
+  });
+  if(state === 'SN') set.add(fmtDate(bussUndBettag(year)));
+  return set;
 }
 
 /* ---------- Auth: Passwort ---------- */
@@ -1430,6 +1522,7 @@ document.querySelectorAll('#welcomeLangList .welcome-lang-btn').forEach(btn=>{
     stopWelcomeGreeting();
     document.getElementById('loginCardWelcome').style.display = 'none';
     document.getElementById('loginCardSetup').style.display = 'block';
+    showSetupStep(0);
   });
 });
 
@@ -1448,14 +1541,49 @@ function showLoginOrSetup(){
   }
   document.getElementById('loginOverlay').style.display = 'flex';
 }
-document.getElementById('setupSubmitBtn').addEventListener('click', ()=>{
+let setupSelectedRole = 'azubi';
+let setupSelectedLand = 'MV';
+const SETUP_STEPS = ['role','account','land'];
+let setupStepIdx = 0;
+function renderSetupDots(){
+  document.getElementById('setupStepDots').innerHTML = SETUP_STEPS.map((_,i)=>'<span style="width:7px;height:7px;border-radius:50%;background:'+(i===setupStepIdx?'var(--accent)':'var(--paper-line)')+';display:inline-block;"></span>').join('');
+}
+function showSetupStep(idx){
+  setupStepIdx = idx;
+  document.getElementById('setupStepRole').style.display = idx===0 ? 'block' : 'none';
+  document.getElementById('setupStepAccount').style.display = idx===1 ? 'block' : 'none';
+  document.getElementById('setupStepLand').style.display = idx===2 ? 'block' : 'none';
+  renderSetupDots();
+}
+document.querySelectorAll('#setupRoleSeg .seg-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    setupSelectedRole = b.dataset.role;
+    document.querySelectorAll('#setupRoleSeg .seg-btn').forEach(x=>x.classList.toggle('active', x===b));
+  });
+});
+document.getElementById('setupRoleNextBtn').addEventListener('click', ()=>showSetupStep(1));
+document.getElementById('setupAccountBackBtn').addEventListener('click', ()=>showSetupStep(0));
+document.getElementById('setupAccountNextBtn').addEventListener('click', ()=>{
   const u = document.getElementById('setupUser').value.trim();
   const p = document.getElementById('setupPass').value;
   const p2 = document.getElementById('setupPass2').value;
   if(!u || !p || p.length < 4 || p !== p2){ document.getElementById('setupError').classList.add('show'); return; }
   document.getElementById('setupError').classList.remove('show');
+  showSetupStep(2);
+});
+populateBundeslandSelect(document.getElementById('setupLandSelect'));
+document.getElementById('setupLandSelect').addEventListener('change', e=>{ setupSelectedLand = e.target.value; });
+document.getElementById('setupLandBackBtn').addEventListener('click', ()=>showSetupStep(1));
+document.getElementById('setupSubmitBtn').addEventListener('click', ()=>{
+  const u = document.getElementById('setupUser').value.trim();
+  const p = document.getElementById('setupPass').value;
+  const p2 = document.getElementById('setupPass2').value;
+  if(!u || !p || p.length < 4 || p !== p2){ showSetupStep(1); document.getElementById('setupError').classList.add('show'); return; }
   localStorage.setItem(ACCOUNT_KEY, JSON.stringify({user:u, pass:p}));
   document.getElementById('setupUser').value=''; document.getElementById('setupPass').value=''; document.getElementById('setupPass2').value='';
+  settings.role = setupSelectedRole;
+  settings.bundesland = document.getElementById('setupLandSelect').value || setupSelectedLand;
+  saveSettings();
   startSession();
   stopWelcomeGreeting();
   document.getElementById('loginOverlay').style.display = 'none';
@@ -1549,7 +1677,13 @@ function loadSettings(){
 function saveSettings(){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }catch(e){} }
 function computeEffectiveTheme(){
   if(settings.theme === 'system') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  if(settings.theme === 'auto'){ const h = new Date().getHours(); return (h >= 19 || h < 7) ? 'dark' : 'light'; }
+  if(settings.theme === 'auto'){
+    const now = new Date(); const mins = now.getHours()*60 + now.getMinutes();
+    const toMins = s => { const [h,m] = (s||'00:00').split(':').map(Number); return h*60+m; };
+    const from = toMins(settings.autoThemeFrom || '19:00'), to = toMins(settings.autoThemeTo || '07:00');
+    const isDark = from <= to ? (mins >= from && mins < to) : (mins >= from || mins < to);
+    return isDark ? 'dark' : 'light';
+  }
   return settings.theme;
 }
 function applySettings(){
@@ -1558,6 +1692,12 @@ function applySettings(){
   document.body.setAttribute('data-density', settings.density);
   document.body.setAttribute('data-fontsize', settings.fontSize || 'normal');
   document.querySelectorAll('#themeSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.theme===settings.theme));
+  const autoThemeTimesEl = document.getElementById('autoThemeTimes');
+  if(autoThemeTimesEl) autoThemeTimesEl.style.display = settings.theme === 'auto' ? 'flex' : 'none';
+  const atFromInput = document.getElementById('autoThemeFromInput');
+  if(atFromInput) atFromInput.value = settings.autoThemeFrom || '19:00';
+  const atToInput = document.getElementById('autoThemeToInput');
+  if(atToInput) atToInput.value = settings.autoThemeTo || '07:00';
   document.querySelectorAll('#accentSwatches .swatch').forEach(b=>b.classList.toggle('active', b.dataset.accent===settings.accent));
   document.querySelectorAll('#densitySeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.density===settings.density));
   document.querySelectorAll('#fontSizeSeg .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.fontsize===(settings.fontSize||'normal')));
@@ -1571,6 +1711,10 @@ function applySettings(){
   if(abInput) abInput.value = settings.ausbildungBeginn || '';
   const vdInput = document.getElementById('vacationDaysInput');
   if(vdInput) vdInput.value = settings.vacationDaysPerYear || 24;
+  const blSelect = document.getElementById('bundeslandSelect');
+  if(blSelect) blSelect.value = settings.bundesland || 'MV';
+  const holHint = document.getElementById('calHolidayHint');
+  if(holHint) holHint.textContent = t('calHolidayHintTemplate').replace('{land}', bundeslandName(settings.bundesland || 'MV'));
   const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
   const metaTag = document.getElementById('themeColorMeta');
   if(metaTag && inkColor) metaTag.setAttribute('content', inkColor);
@@ -1622,6 +1766,15 @@ function setView(view){
   ['dashboard','tasks','calendar','done','trash'].forEach(v=>{ document.getElementById('view-'+v).style.display = (v===view) ? '' : 'none'; });
   document.querySelectorAll('.sb-item[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
   render();
+  const sectionIntroMap = {
+    dashboard: ['dashboard', 'onb1Title', 'onb1Text'],
+    tasks: ['tasks', 'onb2Title', 'onb2Text'],
+    calendar: ['calendar', 'onb3Title', 'onb3Text'],
+    done: ['done_trash', 'onb4Title', 'onb4Text'],
+    trash: ['done_trash', 'onb4Title', 'onb4Text']
+  };
+  const si = sectionIntroMap[view];
+  if(si) queueSectionIntro(si[0], t(si[1]), t(si[2]));
 }
 
 /* ---------- Tasks ---------- */
@@ -2292,7 +2445,7 @@ function renderCalendar(){
   populateApptTaskLink();
   const year = calDate.getFullYear(), month = calDate.getMonth();
   document.getElementById('calMonthLabel').textContent = calDate.toLocaleDateString(curLocale(), {month:'long', year:'numeric'});
-  const holidays = mvHolidays(year);
+  const holidays = stateHolidays(year, settings.bundesland || 'MV');
   const first = new Date(year, month, 1);
   const startOffset = (first.getDay()+6)%7;
   const daysInMonth = new Date(year, month+1, 0).getDate();
@@ -2579,6 +2732,15 @@ document.getElementById('vacationDaysSaveBtn').addEventListener('click', ()=>{
   settings.vacationDaysPerYear = val; saveSettings(); renderAbsenceStatus();
   alert(t('alertSaved'));
 });
+function populateBundeslandSelect(selectEl){
+  if(!selectEl) return;
+  selectEl.innerHTML = BUNDESLAENDER.map(b=>'<option value="'+b.code+'">'+b.name+'</option>').join('');
+}
+populateBundeslandSelect(document.getElementById('bundeslandSelect'));
+document.getElementById('bundeslandSelect').addEventListener('change', e=>{
+  settings.bundesland = e.target.value; saveSettings(); applySettings();
+  if(currentView === 'calendar') renderCalendar();
+});
 setInterval(()=>{
   if(isTodayAbsent()) return;
   if(!shouldPauseAlerts()){
@@ -2626,7 +2788,7 @@ document.querySelectorAll('.settings-cat-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>openSettingsPanel(btn.dataset.panel));
 });
 document.getElementById('settingsBackBtn').addEventListener('click', showSettingsMenu);
-document.getElementById('settingsBtn').addEventListener('click', ()=>{ document.getElementById('settingsOverlay').classList.add('open'); pushModalState(); renderWorkHoursEditor(); showSettingsMenu(); });
+document.getElementById('settingsBtn').addEventListener('click', ()=>{ document.getElementById('settingsOverlay').classList.add('open'); pushModalState(); renderWorkHoursEditor(); showSettingsMenu(); queueSectionIntro('settings', t('onb5Title'), t('onb5Text')); });
 document.getElementById('saveWorkHoursBtn').addEventListener('click', ()=>{
   const wh = {};
   document.querySelectorAll('#workHoursEditor .turnus-day-row').forEach(row=>{
@@ -2641,6 +2803,8 @@ document.getElementById('closeSettings').addEventListener('click', ()=>{ closeOv
 document.getElementById('settingsOverlay').addEventListener('click', e=>{ if(e.target.id==='settingsOverlay') closeOverlay('settingsOverlay'); });
 
 document.querySelectorAll('#themeSeg .seg-btn').forEach(btn=>{ btn.addEventListener('click', ()=>{ settings.theme = btn.dataset.theme; saveSettings(); applySettings(); drawChart(); drawPie(); }); });
+document.getElementById('autoThemeFromInput').addEventListener('change', e=>{ settings.autoThemeFrom = e.target.value || '19:00'; saveSettings(); applySettings(); });
+document.getElementById('autoThemeToInput').addEventListener('change', e=>{ settings.autoThemeTo = e.target.value || '07:00'; saveSettings(); applySettings(); });
 document.querySelectorAll('#accentSwatches .swatch').forEach(btn=>{ btn.addEventListener('click', ()=>{ settings.accent = btn.dataset.accent; saveSettings(); applySettings(); drawChart(); drawPie(); }); });
 document.querySelectorAll('#densitySeg .seg-btn').forEach(btn=>{ btn.addEventListener('click', ()=>{ settings.density = btn.dataset.density; saveSettings(); applySettings(); }); });
 document.querySelectorAll('#fontSizeSeg .seg-btn').forEach(btn=>{ btn.addEventListener('click', ()=>{ settings.fontSize = btn.dataset.fontsize; saveSettings(); applySettings(); }); });
@@ -2812,7 +2976,7 @@ function isFreeDayToday(){
   const now = new Date();
   const day = now.getDay();
   if(day === 0 || day === 6) return true;
-  return mvHolidays(now.getFullYear()).has(todayStr(now));
+  return stateHolidays(now.getFullYear(), settings.bundesland || 'MV').has(todayStr(now));
 }
 function getWorkDurationHours(wh){
   if(!wh || !wh.start || !wh.end) return null;
@@ -2967,43 +3131,52 @@ function showConfetti(){
   setTimeout(()=>overlay.remove(), 3200);
 }
 
-const ONBOARDING_KEY = 'aufgaben-tracker-onboarding-gesehen';
-function getOnboardingSteps(){
-  return [
-    { title:t('onb0Title'), text:t('onb0Text') },
-    { title:t('onb1Title'), text:t('onb1Text') },
-    { title:t('onb2Title'), text:t('onb2Text') },
-    { title:t('onb3Title'), text:t('onb3Text') },
-    { title:t('onb4Title'), text:t('onb4Text') },
-    { title:t('onb5Title'), text:t('onb5Text') }
-  ];
+const SECTION_SEEN_KEY = 'aufgaben-tracker-bereich-einfuehrungen-gesehen';
+function getSeenSections(){ try{ return JSON.parse(localStorage.getItem(SECTION_SEEN_KEY) || '{}'); }catch(e){ return {}; } }
+function markSectionSeen(key){ const s = getSeenSections(); s[key] = 1; localStorage.setItem(SECTION_SEEN_KEY, JSON.stringify(s)); }
+let introQueue = [];
+let introShowing = false;
+let currentIntroKey = null;
+function queueSectionIntro(key, title, text){
+  const seen = getSeenSections();
+  if(seen[key]) return;
+  if(introQueue.some(q=>q.key===key)) return;
+  introQueue.push({key, title, text});
+  processIntroQueue();
 }
-let onboardingStep = 0;
-function renderOnboardingStep(){
-  const onboardingSteps = getOnboardingSteps();
-  const s = onboardingSteps[onboardingStep];
-  document.getElementById('onboardingTitle').textContent = s.title;
-  document.getElementById('onboardingText').textContent = s.text;
-  document.getElementById('onboardingDots').innerHTML = onboardingSteps.map((_,i)=>'<span style="width:7px;height:7px;border-radius:50%;background:'+(i===onboardingStep?'var(--accent)':'var(--paper-line)')+';display:inline-block;"></span>').join('');
-  document.getElementById('onboardingNextBtn').textContent = (onboardingStep === onboardingSteps.length-1) ? t('onboardingFinish') : t('onboardingNext');
-}
-function finishOnboarding(){
-  localStorage.setItem(ONBOARDING_KEY, '1');
-  closeOverlay('onboardingOverlay');
-}
-function maybeShowOnboarding(){
-  if(localStorage.getItem(ONBOARDING_KEY)) return;
-  onboardingStep = 0;
-  renderOnboardingStep();
+function processIntroQueue(){
+  if(introShowing || introQueue.length===0) return;
+  const next = introQueue.shift();
+  introShowing = true;
+  currentIntroKey = next.key;
+  document.getElementById('onboardingTitle').textContent = next.title;
+  document.getElementById('onboardingText').textContent = next.text;
+  document.getElementById('onboardingDots').innerHTML = '';
+  document.getElementById('onboardingSkipBtn').style.display = 'none';
+  document.getElementById('onboardingNextBtn').textContent = t('onboardingFinish');
   document.getElementById('onboardingOverlay').classList.add('open');
   pushModalState();
 }
-document.getElementById('onboardingNextBtn').addEventListener('click', ()=>{
-  if(onboardingStep === getOnboardingSteps().length-1){ finishOnboarding(); return; }
-  onboardingStep++; renderOnboardingStep();
-});
-document.getElementById('onboardingSkipBtn').addEventListener('click', finishOnboarding);
-document.getElementById('closeOnboarding').addEventListener('click', finishOnboarding);
+function closeSectionIntro(){
+  if(currentIntroKey){ markSectionSeen(currentIntroKey); currentIntroKey = null; }
+  closeOverlay('onboardingOverlay');
+  introShowing = false;
+  document.getElementById('onboardingSkipBtn').style.display = '';
+  setTimeout(processIntroQueue, 300);
+}
+function migrateOldOnboardingFlag(){
+  const OLD_KEY = 'aufgaben-tracker-onboarding-gesehen';
+  if(localStorage.getItem(OLD_KEY) && !localStorage.getItem(SECTION_SEEN_KEY)){
+    localStorage.setItem(SECTION_SEEN_KEY, JSON.stringify({welcome:1, dashboard:1, tasks:1, calendar:1, done_trash:1, settings:1}));
+  }
+}
+function maybeShowWelcomeIntro(){
+  queueSectionIntro('welcome', t('onb0Title'), t('onb0Text'));
+}
+document.getElementById('onboardingNextBtn').addEventListener('click', closeSectionIntro);
+document.getElementById('onboardingSkipBtn').addEventListener('click', closeSectionIntro);
+document.getElementById('closeOnboarding').addEventListener('click', closeSectionIntro);
+
 
 function getProfilePhoto(){ return localStorage.getItem(PROFILE_PHOTO_KEY); }
 
@@ -3093,46 +3266,84 @@ function ausbildungsende(){
 function getDayStatus(dateStr){
   return getAbsences()[dateStr] || null;
 }
-function quickMarkAbsence(type){
+function dateStrToObj(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+function eachDateInRange(fromStr, toStr){
+  let a = dateStrToObj(fromStr), b = dateStrToObj(toStr);
+  if(a > b){ const tmp=a; a=b; b=tmp; }
+  const out = []; const cur = new Date(a);
+  while(cur <= b){ out.push(todayStr(cur)); cur.setDate(cur.getDate()+1); }
+  return out;
+}
+let selectedAbsType = 'krank';
+function setSelectedAbsType(type){
+  selectedAbsType = type;
+  document.querySelectorAll('.status-dd-type-btn').forEach(b=>b.classList.toggle('sel', b.dataset.type === type));
+}
+document.querySelectorAll('.status-dd-type-btn').forEach(b=>{
+  b.addEventListener('click', e=>{ e.stopPropagation(); setSelectedAbsType(b.dataset.type); });
+});
+function markAbsenceRange(type, fromStr, toStr){
   const labels = { krank:t('toastSickReported'), urlaub:t('toastVacationReported'), schule:t('toastSchoolReported') };
-  const today = todayStr();
+  const dates = eachDateInRange(fromStr, toStr);
   const map = getAbsences();
-  const previous = map[today] || null;
-  map[today] = type;
+  const previous = {};
+  dates.forEach(d=>{ previous[d] = map[d] || null; map[d] = type; });
   saveAbsences(map);
   renderAbsenceStatus();
   if(currentView === 'calendar') renderCalendar();
   showToast(labels[type] || 'Status gemeldet', ()=>{
     const m = getAbsences();
-    if(previous) m[today] = previous; else delete m[today];
+    dates.forEach(d=>{ if(previous[d]) m[d] = previous[d]; else delete m[d]; });
     saveAbsences(m);
     renderAbsenceStatus();
     if(currentView === 'calendar') renderCalendar();
   });
 }
-document.getElementById('sickBtn').addEventListener('click', ()=>quickMarkAbsence('krank'));
-document.getElementById('schoolBtn').addEventListener('click', ()=>quickMarkAbsence('schule'));
-const urlaubBtnEl = document.getElementById('urlaubBtn');
-if(urlaubBtnEl) urlaubBtnEl.addEventListener('click', ()=>quickMarkAbsence('urlaub'));
+function updateClearBtnVisibility(){
+  const fromStr = document.getElementById('absFromInput').value || todayStr();
+  const toStr = document.getElementById('absToInput').value || fromStr;
+  const map = getAbsences();
+  const anySet = eachDateInRange(fromStr, toStr).some(d=>map[d]);
+  document.getElementById('clearAbsenceBtn').style.display = anySet ? 'flex' : 'none';
+}
+document.getElementById('absFromInput').addEventListener('change', updateClearBtnVisibility);
+document.getElementById('absToInput').addEventListener('change', updateClearBtnVisibility);
+document.getElementById('reportRangeBtn').addEventListener('click', e=>{
+  e.stopPropagation();
+  const fromStr = document.getElementById('absFromInput').value || todayStr();
+  const toStr = document.getElementById('absToInput').value || fromStr;
+  markAbsenceRange(selectedAbsType, fromStr, toStr);
+  document.getElementById('statusDropdown').classList.remove('open');
+  document.getElementById('statusMenuBtn').classList.remove('active');
+});
 document.getElementById('statusMenuBtn').addEventListener('click', e=>{
   e.stopPropagation();
   const dd = document.getElementById('statusDropdown');
   const willOpen = !dd.classList.contains('open');
+  if(willOpen){
+    const t0 = todayStr();
+    document.getElementById('absFromInput').value = t0;
+    document.getElementById('absToInput').value = t0;
+    setSelectedAbsType(getDayStatus(t0) || 'krank');
+    updateClearBtnVisibility();
+  }
   dd.classList.toggle('open', willOpen);
   document.getElementById('statusMenuBtn').classList.toggle('active', willOpen);
 });
-document.getElementById('statusDropdown').addEventListener('click', e=>{
-  if(e.target.closest('.status-dd-item')){
-    document.getElementById('statusDropdown').classList.remove('open');
-    document.getElementById('statusMenuBtn').classList.remove('active');
-  }
-});
+document.getElementById('statusDropdown').addEventListener('click', e=>{ e.stopPropagation(); });
 document.addEventListener('click', ()=>{
   document.getElementById('statusDropdown').classList.remove('open');
   document.getElementById('statusMenuBtn').classList.remove('active');
 });
-document.getElementById('clearAbsenceBtn').addEventListener('click', ()=>{
-  const map = getAbsences(); delete map[todayStr()]; saveAbsences(map); renderAbsenceStatus();
+document.getElementById('clearAbsenceBtn').addEventListener('click', e=>{
+  e.stopPropagation();
+  const fromStr = document.getElementById('absFromInput').value || todayStr();
+  const toStr = document.getElementById('absToInput').value || fromStr;
+  const dates = eachDateInRange(fromStr, toStr);
+  const map = getAbsences();
+  dates.forEach(d=>delete map[d]);
+  saveAbsences(map);
+  renderAbsenceStatus();
   if(currentView === 'calendar') renderCalendar();
 });
 
@@ -3143,13 +3354,11 @@ function vacationDaysUsedThisYear(){
 }
 
 function renderAbsenceStatus(){
-  document.getElementById('schoolBtn').style.display = settings.role === 'azubi' ? 'flex' : 'none';
+  const schoolTypeBtn = document.getElementById('typeSchuleBtn');
+  if(schoolTypeBtn) schoolTypeBtn.style.display = settings.role === 'azubi' ? 'flex' : 'none';
   const status = getDayStatus(todayStr());
   const statusEl = document.getElementById('absenceStatus');
   const clearBtn = document.getElementById('clearAbsenceBtn');
-  document.getElementById('sickBtn').classList.toggle('active-sick', status==='krank');
-  document.getElementById('schoolBtn').classList.toggle('active-school', status==='schule');
-  if(urlaubBtnEl) urlaubBtnEl.classList.toggle('active-urlaub', status==='urlaub');
   const labels = { krank:t('absKrank'), urlaub:t('absUrlaub'), schule:t('absSchule') };
   statusEl.textContent = labels[status] || t('absNone');
   clearBtn.style.display = status ? 'flex' : 'none';
@@ -3208,8 +3417,9 @@ function initApp(){
   applyProfilePhoto();
   ensureFirstUseDate();
   setupAutocompletes();
+  migrateOldOnboardingFlag();
+  maybeShowWelcomeIntro();
   setView('dashboard');
-  maybeShowOnboarding();
   applyWeatherSkinSetting();
 }
 
