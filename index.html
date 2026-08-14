@@ -1126,32 +1126,37 @@ function genieSetOrigin(el, triggerEl){
   el.style.setProperty('--genie-x', ox+'px');
   el.style.setProperty('--genie-y', oy+'px');
 }
+function prefersReducedMotion(){
+  try{ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; }
+}
 function genieOpenEl(el, triggerEl){
   if(!el) return;
+  if(prefersReducedMotion()) return;
   const fx = (settings && settings.windowEffect) || 'slide';
   genieSetOrigin(el, triggerEl);
   el.classList.remove('fx-genie-closing','fx-zoom-closing','fx-fade-closing','fx-slide-closing','fx-flip-closing');
   void el.offsetWidth;
   const cls = 'fx-'+fx+'-opening';
   el.classList.add(cls);
-  el.addEventListener('animationend', function h(){
-    el.removeEventListener('animationend', h);
-    el.classList.remove(cls);
-  }, {once:true});
+  let done = false;
+  function finish(){ if(done) return; done = true; el.removeEventListener('animationend', h); el.classList.remove(cls); }
+  function h(){ finish(); }
+  el.addEventListener('animationend', h, {once:true});
+  setTimeout(finish, 600);
 }
 function genieCloseEl(el, triggerEl, onDone){
-  if(!el){ if(onDone) onDone(); return; }
+  if(!el || prefersReducedMotion()){ if(onDone) onDone(); return; }
   const fx = (settings && settings.windowEffect) || 'slide';
   genieSetOrigin(el, triggerEl);
   el.classList.remove('fx-genie-opening','fx-zoom-opening','fx-fade-opening','fx-slide-opening','fx-flip-opening');
   void el.offsetWidth;
   const cls = 'fx-'+fx+'-closing';
   el.classList.add(cls);
-  el.addEventListener('animationend', function h(){
-    el.removeEventListener('animationend', h);
-    el.classList.remove(cls);
-    if(onDone) onDone();
-  }, {once:true});
+  let done = false;
+  function finish(){ if(done) return; done = true; el.removeEventListener('animationend', h); el.classList.remove(cls); if(onDone) onDone(); }
+  function h(){ finish(); }
+  el.addEventListener('animationend', h, {once:true});
+  setTimeout(finish, 600);
 }
 /* Ziel-Buttons, zu denen die jeweiligen Fenster "einsaugen" */
 const GENIE_FIXED_TARGETS = { addTaskOverlay:'addTaskBtn', settingsOverlay:'settingsBtn', bulkAddOverlay:'bulkAddOpenBtn' };
