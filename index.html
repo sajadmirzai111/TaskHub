@@ -60,17 +60,25 @@
   .avatar-circle.tier-bronze{border-color:#c07a3e;box-shadow:0 0 0 2px rgba(192,122,62,0.35);}
   .avatar-circle.tier-silver{border-color:#b7bcc4;box-shadow:0 0 0 2px rgba(183,188,196,0.4);}
   .avatar-circle.tier-gold{border-color:#e0b23a;box-shadow:0 0 0 2px rgba(224,178,58,0.45);}
-  .sb-item{width:auto;flex:0 1 84px;padding:8px 4px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#767c8f;margin-bottom:0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;position:relative;}
-  .sb-item svg{width:20px;height:20px;}
-  .sb-item span{font-size:10px;font-weight:500;text-align:center;line-height:1.2;}
-  .sb-item.active{background:rgba(255,255,255,0.06);color:#fff;}
-  .sb-item.active::before{content:'';position:absolute;top:2px;left:50%;transform:translateX(-50%);width:16px;height:3px;border-radius:3px;background:var(--accent);}
+  .sb-item{width:auto;flex:0 1 84px;padding:8px 4px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#767c8f;margin-bottom:0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;position:relative;transition:color .25s ease;}
+  .sb-item svg{width:20px;height:20px;transition:opacity .2s ease,transform .2s ease;}
+  .sb-item span{font-size:10px;font-weight:500;text-align:center;line-height:1.2;transition:color .25s ease,font-weight .25s ease;}
+  .sb-item.active{color:#fff;}
+  .sb-item.active > svg{opacity:0;transform:scale(.5);}
+  .sb-item.active span{color:var(--accent);font-weight:700;}
   .sb-item:hover{color:#fff;}
+  .sb-active-orb{position:absolute;top:-21px;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,0.35);opacity:0;z-index:5;pointer-events:none;transition:left .38s cubic-bezier(.34,1.56,.64,1),opacity .2s ease;}
+  .sb-active-orb.show{opacity:1;}
+  .sb-active-orb svg{width:20px;height:20px;}
   .sb-plus{padding:4px;}
-  .sb-plus-circle{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
+  .sb-plus-circle{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,0.35);margin-top:-16px;transition:transform .2s ease;}
   .sb-plus-circle svg{width:22px;height:22px;}
   .sb-plus:hover .sb-plus-circle{opacity:0.92;}
   .sb-plus:active .sb-plus-circle{transform:scale(0.94);}
+  .sb-settings-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.09);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px rgba(0,0,0,0.3);margin-top:-14px;transition:background .2s ease,transform .2s ease;}
+  .sb-settings-circle svg{width:18px;height:18px;}
+  #settingsBtn:active .sb-settings-circle{transform:scale(0.94);}
+  #settingsBtn.active .sb-settings-circle{background:var(--accent);color:#fff;}
   .sb-spacer{display:none;}
 
   .main{flex:1;min-width:0;padding-bottom:74px;}
@@ -84,22 +92,30 @@
   .clock-time{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:600;color:var(--accent);}
 
   .banner{background:var(--highlight-bg);color:var(--highlight-dark);border:1px solid var(--paper-line);border-radius:var(--radius);padding:12px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;}
-  .inbox-item{display:flex;align-items:center;gap:10px;background:var(--paper-2);border:1px solid var(--paper-line);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;font-size:13px;}
-  .inbox-item:last-child{margin-bottom:0;}
-  .inbox-icon{width:32px;height:32px;border-radius:50%;background:var(--accent-light);color:var(--accent-text);display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:15px;}
-  .inbox-item.urgent .inbox-icon{background:var(--danger-light);color:var(--danger);}
-  .inbox-text{flex:1;min-width:0;line-height:1.35;}
-  .inbox-text.clickable{cursor:pointer;}
-  .inbox-actions{display:flex;gap:6px;flex:0 0 auto;align-items:center;}
-  .inbox-action{white-space:nowrap;padding:6px 12px;font-size:12.5px;}
-  .inbox-dismiss{background:none;border:none;color:var(--text-faint);font-size:18px;line-height:1;cursor:pointer;padding:2px 4px;}
-  #inboxCount{margin-left:auto;}
   .banner button{background:var(--ink);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;}
   .banner .dismiss{background:none;color:var(--highlight-dark);padding:4px;font-size:16px;}
 
   .clock-feierabend{font-size:11.5px;font-weight:600;margin-top:3px;color:var(--success);transition:color .3s ease;}
   .clock-feierabend.feierabend-soon{color:#f5a623;}
   .clock-feierabend.feierabend-close{color:#ef5b5b;}
+
+  .header-actions{display:flex;align-items:center;gap:10px;}
+  .mailbox-btn{position:relative;width:38px;height:38px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));box-shadow:var(--shadow);cursor:pointer;color:var(--text-main);}
+  .mailbox-btn svg{width:17px;height:17px;}
+  .mailbox-dot{position:absolute;top:5px;right:5px;width:9px;height:9px;border-radius:50%;background:var(--danger);border:2px solid var(--paper);display:none;}
+  .mailbox-dot.show{display:block;}
+  .postfach-list{display:flex;flex-direction:column;gap:10px;}
+  .postfach-item{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:var(--radius-sm);background:var(--paper-2);border:1px solid var(--paper-line);position:relative;}
+  .postfach-item.unread{box-shadow:inset 3px 0 0 var(--accent);}
+  .postfach-item-icon{width:32px;height:32px;flex:0 0 auto;border-radius:50%;background:var(--accent-light);color:var(--accent-text);display:flex;align-items:center;justify-content:center;}
+  .postfach-item-icon svg{width:16px;height:16px;}
+  .postfach-item-body{flex:1;min-width:0;}
+  .postfach-item-title{font-weight:700;font-size:14px;}
+  .postfach-item-text{font-size:13px;color:var(--text-sub);margin-top:2px;}
+  .postfach-item-time{font-size:11px;color:var(--text-faint);margin-top:4px;}
+  .postfach-item-del{background:none;border:none;color:var(--text-faint);font-size:18px;cursor:pointer;line-height:1;padding:2px 4px;flex:0 0 auto;}
+  .postfach-item-del:hover{color:var(--danger);}
+  .postfach-empty{color:var(--text-sub);font-size:14px;text-align:center;padding:30px 0;}
   .confetti-overlay{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden;}
   .confetti-piece{position:absolute;top:-10px;width:8px;height:14px;opacity:0.9;border-radius:2px;animation-name:confetti-fall;animation-timing-function:ease-in;animation-fill-mode:forwards;}
   @keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(105vh) rotate(360deg);opacity:0.4;}}
@@ -545,6 +561,7 @@
 
 <div class="sidebar">
   <div class="sb-logo" id="sbLogo">T</div>
+  <div class="sb-active-orb" id="sbActiveOrb"></div>
   <button class="sb-item" data-view="dashboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
     <span data-i18n="navDashboard">Dashboard</span>
@@ -570,13 +587,21 @@
   </button>
   <div class="sb-spacer"></div>
   <button class="sb-item" id="settingsBtn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span class="sb-settings-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
     <span data-i18n="navSettings">Einstellungen</span>
   </button>
 </div>
 
 <div class="main">
   <div class="wrap">
+
+    <div class="banner" id="backupBanner" style="display:none;">
+      <span>Du hast lange kein Backup gemacht. Sichere deine Aufgaben als Datei.</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="bannerBackupBtn">Jetzt sichern</button>
+        <button class="dismiss" id="bannerDismiss" aria-label="Ausblenden">&times;</button>
+      </div>
+    </div>
 
     <!-- DASHBOARD -->
     <div id="view-dashboard" style="display:none;">
@@ -585,18 +610,17 @@
           <div class="avatar-circle" id="dashboardAvatar" style="width:44px;height:44px;font-size:17px;">T</div>
           <div><p class="view-title" id="greetingTitle">TaskHub</p><p class="view-sub" id="greetingSub">Dein &Uuml;berblick f&uuml;r heute.</p></div>
         </div>
-        <div class="clock-box">
-          <div class="clock-date" id="clockDate"></div>
-          <div class="clock-time" id="clockTime"></div>
-          <div class="clock-feierabend" id="feierabendCountdown"></div>
+        <div class="header-actions">
+          <button class="mailbox-btn" id="mailboxBtn" aria-label="Briefkasten" title="Briefkasten">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6z"/><path d="M2 6l10 7 10-7"/></svg>
+            <span class="mailbox-dot" id="mailboxDot"></span>
+          </button>
+          <div class="clock-box">
+            <div class="clock-date" id="clockDate"></div>
+            <div class="clock-time" id="clockTime"></div>
+            <div class="clock-feierabend" id="feierabendCountdown"></div>
+          </div>
         </div>
-      </div>
-      <div class="chart-card" id="inboxCard" style="display:none;">
-        <div class="chart-head">
-          <p class="chart-title" data-i18n="inboxTitle">Postfach</p>
-          <span class="company-count" id="inboxCount">0</span>
-        </div>
-        <div id="inboxList"></div>
       </div>
       <div class="stats">
         <div class="stat open"><svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div class="stat-num" id="dashStatOpen">0</div><div class="stat-label" data-i18n="statOpen">offen</div></div>
@@ -646,6 +670,10 @@
     <!-- AUFGABEN -->
     <div id="view-tasks" style="display:none;">
       <div class="view-head"><div><p class="view-title" data-i18n="tasksTitle">Aufgaben</p><p class="view-sub" data-i18n="tasksSub">Alles, was bei der Arbeit zu tun ist.</p></div></div>
+
+      <div class="banner" id="urgentBanner" style="display:none;background:var(--danger-light);color:var(--danger);">
+        <span id="urgentBannerText"></span>
+      </div>
 
       <div class="chart-card" id="pieCard">
         <p class="chart-title" style="margin-bottom:10px;" data-i18n="chartPriorities">Priorit&auml;ten (offen)</p>
@@ -899,6 +927,19 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 
+<div class="modal-overlay" id="postfachOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 data-i18n="postfachTitle">Briefkasten</h2>
+      <button class="modal-close" id="closePostfach">&times;</button>
+    </div>
+    <div id="postfachList" class="postfach-list"></div>
+    <p style="text-align:right;margin-top:14px;">
+      <button class="link-btn" id="postfachClearBtn" data-i18n="postfachClearBtn" style="background:none;border:none;color:var(--text-sub);font-size:12.5px;cursor:pointer;padding:4px;">Alle löschen</button>
+    </p>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settingsOverlay">
   <div class="modal">
     <div class="modal-head">
@@ -1086,11 +1127,12 @@ const COUNTER_KEY = 'aufgaben-tracker-zaehler';
 const NOTES_KEY = 'aufgaben-tracker-notizen';
 const ABSENCE_KEY = 'aufgaben-tracker-abwesenheiten';
 const PROFILE_PHOTO_KEY = 'aufgaben-tracker-profilbild';
+const POSTFACH_KEY = 'aufgaben-tracker-postfach';
 const WORKDAY_KEYS = ['mon','tue','wed','thu','fri'];
 const WORKDAY_LABELS = { mon:'Montag', tue:'Dienstag', wed:'Mittwoch', thu:'Donnerstag', fri:'Freitag' };
 const FIRST_USE_KEY = 'aufgaben-tracker-erstnutzung';
 const LIFETIME_KEY = 'aufgaben-tracker-lifetime-erledigt';
-const BACKUP_REMINDER_MS = 30 * 24 * 60 * 60 * 1000;
+const BACKUP_REMINDER_MS = 14 * 24 * 60 * 60 * 1000;
 const ARCHIVE_MS = 60 * 24 * 60 * 60 * 1000;
 const TRASH_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -1104,9 +1146,10 @@ let calDate = new Date();
 let dragTaskId = null;
 let currentView = null;
 let openTaskId = null;
+let postfach = [];
 
 /* ---------- Modal-Navigation (verhindert App-Exit beim Zur\u00fcck-Button) ---------- */
-const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay'];
+const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay','postfachOverlay'];
 let modalOpen = false;
 function pushModalState(){
   if(!modalOpen){
@@ -1126,37 +1169,32 @@ function genieSetOrigin(el, triggerEl){
   el.style.setProperty('--genie-x', ox+'px');
   el.style.setProperty('--genie-y', oy+'px');
 }
-function prefersReducedMotion(){
-  try{ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; }
-}
 function genieOpenEl(el, triggerEl){
   if(!el) return;
-  if(prefersReducedMotion()) return;
   const fx = (settings && settings.windowEffect) || 'slide';
   genieSetOrigin(el, triggerEl);
   el.classList.remove('fx-genie-closing','fx-zoom-closing','fx-fade-closing','fx-slide-closing','fx-flip-closing');
   void el.offsetWidth;
   const cls = 'fx-'+fx+'-opening';
   el.classList.add(cls);
-  let done = false;
-  function finish(){ if(done) return; done = true; el.removeEventListener('animationend', h); el.classList.remove(cls); }
-  function h(){ finish(); }
-  el.addEventListener('animationend', h, {once:true});
-  setTimeout(finish, 600);
+  el.addEventListener('animationend', function h(){
+    el.removeEventListener('animationend', h);
+    el.classList.remove(cls);
+  }, {once:true});
 }
 function genieCloseEl(el, triggerEl, onDone){
-  if(!el || prefersReducedMotion()){ if(onDone) onDone(); return; }
+  if(!el){ if(onDone) onDone(); return; }
   const fx = (settings && settings.windowEffect) || 'slide';
   genieSetOrigin(el, triggerEl);
   el.classList.remove('fx-genie-opening','fx-zoom-opening','fx-fade-opening','fx-slide-opening','fx-flip-opening');
   void el.offsetWidth;
   const cls = 'fx-'+fx+'-closing';
   el.classList.add(cls);
-  let done = false;
-  function finish(){ if(done) return; done = true; el.removeEventListener('animationend', h); el.classList.remove(cls); if(onDone) onDone(); }
-  function h(){ finish(); }
-  el.addEventListener('animationend', h, {once:true});
-  setTimeout(finish, 600);
+  el.addEventListener('animationend', function h(){
+    el.removeEventListener('animationend', h);
+    el.classList.remove(cls);
+    if(onDone) onDone();
+  }, {once:true});
 }
 /* Ziel-Buttons, zu denen die jeweiligen Fenster "einsaugen" */
 const GENIE_FIXED_TARGETS = { addTaskOverlay:'addTaskBtn', settingsOverlay:'settingsBtn', bulkAddOverlay:'bulkAddOpenBtn' };
@@ -1174,6 +1212,7 @@ function closeOverlay(id){
   function finish(){
     if(el) el.classList.remove('open');
     if(id === 'detailOverlay') openTaskId = null;
+    if(id === 'settingsOverlay'){ const sb = document.getElementById('settingsBtn'); if(sb) sb.classList.remove('active'); }
     if(id === 'lightboxOverlay'){ const img = document.getElementById('lightboxImg'); if(img) img.src=''; }
     if(modalOpen){
       modalOpen = false;
@@ -1191,6 +1230,7 @@ window.addEventListener('popstate', ()=>{
     modalOpen = false;
     OVERLAY_IDS.forEach(id=>{ const el = document.getElementById(id); if(el) el.classList.remove('open'); });
     openTaskId = null;
+    const sb = document.getElementById('settingsBtn'); if(sb) sb.classList.remove('active');
     const img = document.getElementById('lightboxImg'); if(img) img.src='';
   }
 });
@@ -1205,7 +1245,7 @@ let toastTimer = null;
 let lastAction = null;
 
 const defaultSettings = { theme:'dark', accent:'blue', density:'comfortable', sortDone:'bottom', lastBackupAt:null, urgentReminderHours:4, fontSize:'normal', lang:'de', windowEffect:'slide',
-  role:'azubi', ausbildungBeginn:null, vacationDaysPerYear:24, berichtsheftDismissedWeek:null, bundesland:'MV', autoThemeFrom:'19:00', autoThemeTo:'07:00',
+  role:'azubi', ausbildungBeginn:null, vacationDaysPerYear:24, bundesland:'MV', autoThemeFrom:'19:00', autoThemeTo:'07:00',
   workHours: { mon:{start:'07:30',end:'16:30'}, tue:{start:'07:30',end:'16:30'}, wed:{start:'07:30',end:'16:30'}, thu:{start:'07:30',end:'16:30'}, fri:{start:'07:30',end:'15:00'} } };
 const PRIORITY_META = {
   urgent:{ label:'Dringend & schnell', order:0, color:'var(--danger)' },
@@ -1302,7 +1342,6 @@ de: {
   archiveHintShown:'{n} archivierte Aufgabe(n) werden angezeigt.', archiveHintHidden:'{n} archivierte Aufgabe(n) (\u00e4lter als 60 Tage) ausgeblendet \u2013 in den Einstellungen einblendbar.',
   btnArchiveShow:'Archivierte (\u00e4lter als 60 Tage) einblenden', btnArchiveHide:'Archivierte wieder ausblenden',
   lastBackupTemplate:'Letztes Backup: {date}', noBackupYet:'Noch kein Backup erstellt.',
-  inboxTitle:'Postfach', inboxEmpty:'Keine neuen Nachrichten.', inboxBackupMsg:'Du hast lange kein Backup gemacht. Sichere deine Aufgaben als Datei.', inboxBackupBtn:'Jetzt sichern', inboxWeekSummary:'{count} Aufgaben diese Woche erledigt ({points} Punkte).', inboxOk:'Ok',
   urgentBannerSingle:'1 dringende Aufgabe ist seit \u00fcber {hours} Stunden offen: {title}', urgentBannerMulti:'{count} dringende Aufgaben sind seit \u00fcber {hours} Stunden offen.',
   berichtsheftQuestion:'Berichtsheft diese Woche schon ausgef\u00fcllt?', berichtsheftDoneBtn:'Erledigt',
   alertUserPassRequired:'Bitte Benutzernamen und mindestens 4 Zeichen Passwort angeben.', alertCredsSaved:'Zugangsdaten gespeichert.',
@@ -1314,7 +1353,11 @@ de: {
   alertInvalidHours:'Bitte eine g\u00fcltige Stundenzahl eingeben.', alertSaved:'Gespeichert.', alertInvalidNumber:'Bitte eine g\u00fcltige Zahl eingeben.',
   alertWorkHoursSaved:'Arbeitszeiten gespeichert.', alertNotifEnabled:'Erinnerungen aktiviert (nur solange die Seite ge\u00f6ffnet ist).', alertNotifDenied:'Erinnerungen wurden nicht erlaubt.',
   trashDaysLeft:'{n} Tage bis endg\u00fcltigem L\u00f6schen', btnRestore:'Wiederherstellen', btnPurge:'Endg\u00fcltig l\u00f6schen',
-  dayYesterday:'Gestern', groupOlder:'\u00c4lter'
+  dayYesterday:'Gestern', groupOlder:'\u00c4lter',
+  postfachTitle:'Briefkasten', postfachEmpty:'Noch keine Nachrichten.', postfachClearBtn:'Alle l\u00f6schen',
+  pfUrgentTitle:'Dringende Aufgabe', pfBerichtsheftTitle:'Berichtsheft', pfBerichtsheftText:'Vergiss nicht, dein Berichtsheft f\u00fcr diese Woche zu schreiben.',
+  pfWeekTitle:'Wochenr\u00fcckblick', pfWeekTextTemplate:'Diese Woche hast du {count} Aufgabe(n) erledigt ({points} Punkte).', pfWeekTextNone:'Diese Woche hast du noch keine Aufgabe erledigt.',
+  pfBackupTitle:'Backup-Erinnerung', pfBackupText:'Zeit f\u00fcr dein monatliches Backup \u2013 sichere deine Aufgaben als Datei.'
 },
 en: {
   navDashboard:'Dashboard', navTasks:'Tasks', navCalendar:'Calendar', navDone:'Done', navTrash:'Trash', navNotes:'Notes', navSettings:'Settings',
@@ -1402,7 +1445,6 @@ en: {
   archiveHintShown:'{n} archived task(s) shown.', archiveHintHidden:'{n} archived task(s) (older than 60 days) hidden \u2013 can be shown in settings.',
   btnArchiveShow:'Show archived (older than 60 days)', btnArchiveHide:'Hide archived again',
   lastBackupTemplate:'Last backup: {date}', noBackupYet:'No backup created yet.',
-  inboxTitle:'Inbox', inboxEmpty:'No new messages.', inboxBackupMsg:'You haven\'t backed up in a while. Save your tasks as a file.', inboxBackupBtn:'Back up now', inboxWeekSummary:'{count} tasks done this week ({points} points).', inboxOk:'Ok',
   urgentBannerSingle:'1 urgent task has been open for over {hours} hours: {title}', urgentBannerMulti:'{count} urgent tasks have been open for over {hours} hours.',
   berichtsheftQuestion:'Filled in your work journal this week yet?', berichtsheftDoneBtn:'Done',
   alertUserPassRequired:'Please enter a username and a password of at least 4 characters.', alertCredsSaved:'Credentials saved.',
@@ -1414,7 +1456,11 @@ en: {
   alertInvalidHours:'Please enter a valid number of hours.', alertSaved:'Saved.', alertInvalidNumber:'Please enter a valid number.',
   alertWorkHoursSaved:'Working hours saved.', alertNotifEnabled:'Reminders enabled (only while the page is open).', alertNotifDenied:'Reminders were not allowed.',
   trashDaysLeft:'{n} days until permanently deleted', btnRestore:'Restore', btnPurge:'Delete permanently',
-  dayYesterday:'Yesterday', groupOlder:'Older'
+  dayYesterday:'Yesterday', groupOlder:'Older',
+  postfachTitle:'Inbox', postfachEmpty:'No messages yet.', postfachClearBtn:'Clear all',
+  pfUrgentTitle:'Urgent task', pfBerichtsheftTitle:'Work journal', pfBerichtsheftText:'Don\u2019t forget to fill in your work journal for this week.',
+  pfWeekTitle:'Weekly recap', pfWeekTextTemplate:'You completed {count} task(s) this week ({points} points).', pfWeekTextNone:'You haven\u2019t completed any tasks this week yet.',
+  pfBackupTitle:'Backup reminder', pfBackupText:'Time for your monthly backup \u2013 save your tasks as a file.'
 },
 fa: {
   navDashboard:'داشبورد', navTasks:'وظایف', navCalendar:'تقویم', navDone:'انجام\u200cشده', navTrash:'سطل زباله', navNotes:'یادداشت\u200cها', navSettings:'تنظیمات',
@@ -1502,7 +1548,6 @@ fa: {
   archiveHintShown:'{n} وظیفه بایگانی‌شده نمایش داده می‌شود.', archiveHintHidden:'{n} وظیفه بایگانی‌شده (قدیمی‌تر از ۶۰ روز) پنهان شده – در تنظیمات قابل نمایش است.',
   btnArchiveShow:'نمایش بایگانی‌شده‌ها (قدیمی‌تر از ۶۰ روز)', btnArchiveHide:'پنهان کردن دوباره بایگانی‌شده‌ها',
   lastBackupTemplate:'آخرین پشتیبان: {date}', noBackupYet:'هنوز پشتیبانی ایجاد نشده است.',
-  inboxTitle:'صندوق پیام', inboxEmpty:'پیام جدیدی نیست.', inboxBackupMsg:'مدتی است پشتیبان‌گیری نکرده‌اید. وظایف خود را به عنوان فایل ذخیره کنید.', inboxBackupBtn:'اکنون پشتیبان بگیر', inboxWeekSummary:'{count} وظیفه این هفته انجام شد ({points} امتیاز).', inboxOk:'باشه',
   urgentBannerSingle:'۱ وظیفه فوری بیش از {hours} ساعت است که باز است: {title}', urgentBannerMulti:'{count} وظیفه فوری بیش از {hours} ساعت است که باز هستند.',
   berichtsheftQuestion:'گزارش کار این هفته را پر کرده‌اید؟', berichtsheftDoneBtn:'انجام شد',
   alertUserPassRequired:'لطفاً نام کاربری و رمز عبوری حداقل ۴ کاراکتری وارد کنید.', alertCredsSaved:'اطلاعات ورود ذخیره شد.',
@@ -1514,7 +1559,11 @@ fa: {
   alertInvalidHours:'لطفاً تعداد ساعت معتبری وارد کنید.', alertSaved:'ذخیره شد.', alertInvalidNumber:'لطفاً عدد معتبری وارد کنید.',
   alertWorkHoursSaved:'ساعات کاری ذخیره شد.', alertNotifEnabled:'یادآوری‌ها فعال شدند (فقط تا زمانی که صفحه باز است).', alertNotifDenied:'یادآوری‌ها مجاز نشدند.',
   trashDaysLeft:'{n} روز تا حذف قطعی', btnRestore:'بازیابی', btnPurge:'حذف قطعی',
-  dayYesterday:'دیروز', groupOlder:'قدیمی‌تر'
+  dayYesterday:'دیروز', groupOlder:'قدیمی‌تر',
+  postfachTitle:'صندوق پیام', postfachEmpty:'هنوز پیامی وجود ندارد.', postfachClearBtn:'حذف همه',
+  pfUrgentTitle:'وظیفه فوری', pfBerichtsheftTitle:'گزارش کار', pfBerichtsheftText:'فراموش نکنید گزارش کار این هفته را بنویسید.',
+  pfWeekTitle:'مرور هفته', pfWeekTextTemplate:'این هفته {count} وظیفه را انجام دادید ({points} امتیاز).', pfWeekTextNone:'این هفته هنوز هیچ وظیفه‌ای انجام نداده‌اید.',
+  pfBackupTitle:'یادآوری پشتیبان‌گیری', pfBackupText:'وقت پشتیبان‌گیری ماهانه است \u2013 وظایف خود را به صورت فایل ذخیره کنید.'
 }
 };
 function t(key){ const lang = (settings && settings.lang) || 'de'; return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS.de[key] || key; }
@@ -1880,10 +1929,12 @@ function loadAll(){
   try{ tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }catch(e){ tasks = []; }
   try{ appointments = JSON.parse(localStorage.getItem(APPT_KEY) || '[]'); }catch(e){ appointments = []; }
   try{ notes = JSON.parse(localStorage.getItem(NOTES_KEY) || '[]'); }catch(e){ notes = []; }
+  try{ postfach = JSON.parse(localStorage.getItem(POSTFACH_KEY) || '[]'); }catch(e){ postfach = []; }
 }
 function saveTasks(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); }catch(e){ alert(t('alertSaveFailed')); } }
 function saveAppointments(){ try{ localStorage.setItem(APPT_KEY, JSON.stringify(appointments)); }catch(e){} }
 function saveNotes(){ try{ localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); }catch(e){ alert(t('alertSaveFailed')); } }
+function savePostfach(){ try{ localStorage.setItem(POSTFACH_KEY, JSON.stringify(postfach)); }catch(e){} }
 function todayStr(d){ d = d || new Date(); return fmtDate(d); }
 
 function purgeOldTrash(){
@@ -1912,6 +1963,25 @@ document.getElementById('toastUndoBtn').addEventListener('click', ()=>{
 /* ---------- Navigation ---------- */
 document.querySelectorAll('.sb-item[data-view]').forEach(btn=>{ btn.addEventListener('click', ()=>{ setView(btn.dataset.view, btn); }); });
 
+function positionActiveOrb(btn, animate){
+  const orb = document.getElementById('sbActiveOrb');
+  const sidebar = document.querySelector('.sidebar');
+  if(!orb || !sidebar || !btn) return;
+  const sbRect = sidebar.getBoundingClientRect();
+  const bRect = btn.getBoundingClientRect();
+  const centerX = bRect.left + bRect.width/2 - sbRect.left;
+  if(!animate){ orb.style.transition = 'none'; }
+  orb.style.left = centerX + 'px';
+  const svg = btn.querySelector('svg');
+  if(svg) orb.innerHTML = svg.outerHTML;
+  orb.classList.add('show');
+  if(!animate){ void orb.offsetWidth; orb.style.transition = ''; }
+}
+window.addEventListener('resize', ()=>{
+  const activeBtn = document.querySelector('.sb-item[data-view].active');
+  if(activeBtn) positionActiveOrb(activeBtn, false);
+});
+
 function setView(view, triggerEl){
   if(view === currentView) return;
   const prevView = currentView;
@@ -1919,6 +1989,7 @@ function setView(view, triggerEl){
   const nextEl = document.getElementById('view-'+view);
   const btn = triggerEl || document.querySelector('.sb-item[data-view="'+view+'"]');
   document.querySelectorAll('.sb-item[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  positionActiveOrb(btn, prevView !== null);
   function activateNext(){
     currentView = view;
     ['dashboard','tasks','calendar','trash','notes'].forEach(v=>{ document.getElementById('view-'+v).style.display = (v===view) ? '' : 'none'; });
@@ -2254,98 +2325,6 @@ function renderDashboard(){
   renderPointsCard();
   drawRing(openCount, doneCount);
   drawChart();
-  renderInbox();
-}
-
-/* ---------- Postfach ---------- */
-const inboxDismissed = new Set();
-function dismissInboxMsg(id){ inboxDismissed.add(id); renderInbox(); }
-function isFullWeekAbsent(){
-  const { start } = getWeekRange(0);
-  for(let i=0;i<5;i++){
-    const d = new Date(start); d.setDate(start.getDate()+i);
-    const status = getDayStatus(todayStr(d));
-    if(!(status==='krank' || status==='urlaub' || status==='schule')) return false;
-  }
-  return true;
-}
-function getInboxMessages(){
-  const msgs = [];
-  const now = new Date();
-  const day = now.getDay();
-  const hour = now.getHours() + now.getMinutes()/60;
-  const weekKey = getISOWeekKey(now);
-
-  if(!isTodayAbsent()){
-    const hours = settings.urgentReminderHours || 4;
-    const overdue = activeTasks().filter(x=>!x.done && x.priority==='urgent' && (Date.now()-x.createdAt) > hours*3600000);
-    if(overdue.length===1){
-      msgs.push({ id:'urgent-'+overdue[0].id, type:'urgent', icon:'\u26a0\ufe0f',
-        text: t('urgentBannerSingle').replace('{hours}', hours).replace('{title}', overdue[0].title),
-        onClick: ()=>openLinkedTask(overdue[0].id) });
-    } else if(overdue.length>1){
-      msgs.push({ id:'urgent-multi-'+overdue.length, type:'urgent', icon:'\u26a0\ufe0f',
-        text: t('urgentBannerMulti').replace('{count}', overdue.length).replace('{hours}', hours),
-        onClick: ()=>setView('tasks') });
-    }
-  }
-
-  if(settings.role === 'azubi'){
-    const berichtsheftDue = (day===5 && hour>=13) || day===6 || day===0;
-    if(berichtsheftDue && settings.berichtsheftDismissedWeek !== weekKey){
-      msgs.push({ id:'berichtsheft-'+weekKey, type:'berichtsheft', icon:'\ud83d\udcd8',
-        text: t('berichtsheftQuestion'),
-        action:{ label:t('berichtsheftDoneBtn'), onClick:()=>{ settings.berichtsheftDismissedWeek = weekKey; saveSettings(); renderInbox(); } } });
-    }
-  }
-
-  const summaryDue = (day===5 && hour>=14.5) || day===6 || day===0;
-  if(summaryDue && settings.weekSummaryDismissedWeek !== weekKey && !isFullWeekAbsent()){
-    const { start, end } = getWeekRange(0);
-    const doneInWeek = activeTasks().filter(x=>x.done && x.completedAt && x.completedAt>=start.getTime() && x.completedAt<=end.getTime());
-    const counts = { urgent:0, soon:0, relaxed:0 };
-    doneInWeek.forEach(x=>counts[x.priority||'soon']++);
-    const points = counts.urgent*POINTS_MAP.urgent + counts.soon*POINTS_MAP.soon + counts.relaxed*POINTS_MAP.relaxed;
-    msgs.push({ id:'weeksum-'+weekKey, type:'summary', icon:'\ud83d\udcca',
-      text: t('inboxWeekSummary').replace('{count}', doneInWeek.length).replace('{points}', points),
-      action:{ label:t('inboxOk'), onClick:()=>{ settings.weekSummaryDismissedWeek = weekKey; saveSettings(); renderInbox(); } } });
-  }
-
-  const backupOverdue = tasks.length > 0 && (!settings.lastBackupAt || (Date.now() - settings.lastBackupAt) > BACKUP_REMINDER_MS);
-  if(backupOverdue){
-    msgs.push({ id:'backup', type:'backup', icon:'\ud83d\udcbe',
-      text: t('inboxBackupMsg'),
-      action:{ label:t('inboxBackupBtn'), onClick:()=>{ exportData(); } } });
-  }
-
-  return msgs.filter(m=>!inboxDismissed.has(m.id));
-}
-function renderInbox(){
-  const card = document.getElementById('inboxCard');
-  const list = document.getElementById('inboxList');
-  const countEl = document.getElementById('inboxCount');
-  if(!card || !list) return;
-  const msgs = getInboxMessages();
-  if(msgs.length===0){ card.style.display = 'none'; list.innerHTML = ''; return; }
-  card.style.display = '';
-  if(countEl) countEl.textContent = msgs.length;
-  list.innerHTML = msgs.map(m=>
-    '<div class="inbox-item '+m.type+'">'
-    + '<div class="inbox-icon">'+m.icon+'</div>'
-    + '<div class="inbox-text'+(m.onClick?' clickable':'')+'" data-mid="'+m.id+'" data-act="open">'+esc(m.text)+'</div>'
-    + '<div class="inbox-actions">'
-    + (m.action ? '<button class="btn-secondary inbox-action" data-mid="'+m.id+'" data-act="action">'+esc(m.action.label)+'</button>' : '')
-    + '<button class="inbox-dismiss" data-mid="'+m.id+'" data-act="dismiss" aria-label="Ausblenden">&times;</button>'
-    + '</div></div>'
-  ).join('');
-  const byId = {}; msgs.forEach(m=>byId[m.id]=m);
-  list.querySelectorAll('[data-mid]').forEach(el=>{
-    const m = byId[el.dataset.mid]; if(!m) return;
-    const act = el.dataset.act;
-    if(act==='open' && m.onClick) el.addEventListener('click', m.onClick);
-    else if(act==='action' && m.action) el.addEventListener('click', m.action.onClick);
-    else if(act==='dismiss') el.addEventListener('click', ()=>dismissInboxMsg(m.id));
-  });
 }
 
 function renderDashUrgentList(at){
@@ -2423,7 +2402,15 @@ function drawRing(openCount, doneCount){
 }
 
 function renderUrgentBanner(){
-  renderInbox();
+  const banner = document.getElementById('urgentBanner');
+  if(isTodayAbsent()){ banner.style.display = 'none'; return; }
+  const hours = settings.urgentReminderHours || 4;
+  const overdue = activeTasks().filter(t=>!t.done && t.priority==='urgent' && (Date.now()-t.createdAt) > hours*3600000);
+  if(overdue.length===0){ banner.style.display = 'none'; return; }
+  banner.style.display = 'flex';
+  document.getElementById('urgentBannerText').textContent = overdue.length===1
+    ? t('urgentBannerSingle').replace('{hours}', hours).replace('{title}', overdue[0].title)
+    : t('urgentBannerMulti').replace('{count}', overdue.length).replace('{hours}', hours);
 }
 
 function renderTasksView(){
@@ -2980,7 +2967,7 @@ function tickClock(){
   if(dEl) dEl.textContent = now.toLocaleDateString(curLocale(), {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
   if(tEl) tEl.textContent = now.toLocaleTimeString(curLocale());
   renderFeierabendBox();
-  if(currentView === 'dashboard' && now.getSeconds()%20===0) renderInbox();
+  if(now.getSeconds() === 0) checkPostfachTriggers();
 }
 setInterval(tickClock, 1000);
 
@@ -2988,7 +2975,9 @@ setInterval(tickClock, 1000);
 function updateBackupUI(){
   const hint = document.getElementById('lastBackupHint');
   hint.textContent = settings.lastBackupAt ? t('lastBackupTemplate').replace('{date}', new Date(settings.lastBackupAt).toLocaleString(curLocale())) : t('noBackupYet');
-  renderInbox();
+  const banner = document.getElementById('backupBanner');
+  const overdue = !settings.lastBackupAt || (Date.now() - settings.lastBackupAt) > BACKUP_REMINDER_MS;
+  banner.style.display = (overdue && tasks.length > 0) ? 'flex' : 'none';
 }
 function exportData(){
   const payload = { tasks, appointments, exportedAt: Date.now() };
@@ -3013,6 +3002,8 @@ function exportCsv(){
 }
 document.getElementById('exportBtn').addEventListener('click', exportData);
 document.getElementById('exportCsvBtn').addEventListener('click', exportCsv);
+document.getElementById('bannerBackupBtn').addEventListener('click', exportData);
+document.getElementById('bannerDismiss').addEventListener('click', ()=>{ document.getElementById('backupBanner').style.display = 'none'; });
 document.getElementById('importBtn').addEventListener('click', ()=>{ document.getElementById('importFile').click(); });
 document.getElementById('importFile').addEventListener('change', e=>{
   const file = e.target.files[0]; if(!file) return;
@@ -3116,7 +3107,7 @@ document.querySelectorAll('.settings-cat-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>openSettingsPanel(btn.dataset.panel));
 });
 document.getElementById('settingsBackBtn').addEventListener('click', showSettingsMenu);
-document.getElementById('settingsBtn').addEventListener('click', ()=>{ const ov = document.getElementById('settingsOverlay'); ov.classList.add('open'); pushModalState(); renderWorkHoursEditor(); showSettingsMenu(); queueSectionIntro('settings', t('onb5Title'), t('onb5Text')); genieOpenEl(ov.querySelector('.modal'), document.getElementById('settingsBtn')); });
+document.getElementById('settingsBtn').addEventListener('click', ()=>{ const ov = document.getElementById('settingsOverlay'); ov.classList.add('open'); document.getElementById('settingsBtn').classList.add('active'); pushModalState(); renderWorkHoursEditor(); showSettingsMenu(); queueSectionIntro('settings', t('onb5Title'), t('onb5Text')); genieOpenEl(ov.querySelector('.modal'), document.getElementById('settingsBtn')); });
 document.getElementById('saveWorkHoursBtn').addEventListener('click', ()=>{
   const wh = {};
   document.querySelectorAll('#workHoursEditor .turnus-day-row').forEach(row=>{
@@ -3578,9 +3569,6 @@ function renderAbsenceStatus(){
           : t('ausbildungOverdue');
       } else { endEl.textContent = t('ausbildungNoDate'); }
     }
-    renderBerichtsheftBanner();
-  }else{
-    renderInbox();
   }
 }
 
@@ -3591,8 +3579,107 @@ function getISOWeekKey(d){
   const week = 1 + Math.round(((date-firstThursday)/86400000 - 3 + ((firstThursday.getDay()+6)%7))/7);
   return date.getFullYear()+'-W'+week;
 }
-function renderBerichtsheftBanner(){
-  renderInbox();
+
+/* ---------- Briefkasten (Postfach) ---------- */
+function addPostfachMessage(type, title, text, dedupeKey){
+  if(dedupeKey && postfach.some(m=>m.dedupeKey===dedupeKey)) return;
+  postfach.unshift({ id:'pf-'+Date.now()+'-'+Math.random().toString(36).slice(2,7), type, title, text, createdAt:Date.now(), read:false, dedupeKey:dedupeKey||null });
+  if(postfach.length > 150) postfach = postfach.slice(0,150);
+  savePostfach();
+  renderPostfachBadge();
+}
+function unreadPostfachCount(){ return postfach.filter(m=>!m.read).length; }
+function renderPostfachBadge(){
+  const dot = document.getElementById('mailboxDot');
+  if(dot) dot.classList.toggle('show', unreadPostfachCount() > 0);
+}
+function markAllPostfachRead(){
+  if(postfach.some(m=>!m.read)){ postfach.forEach(m=>{ m.read = true; }); savePostfach(); }
+  renderPostfachBadge();
+}
+function deletePostfachMessage(id){ postfach = postfach.filter(m=>m.id!==id); savePostfach(); renderPostfach(); renderPostfachBadge(); }
+function clearPostfach(){ postfach = []; savePostfach(); renderPostfach(); renderPostfachBadge(); }
+const POSTFACH_ICONS = {
+  urgent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+  berichtsheft:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
+  week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>',
+  backup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h3l2-2h4l2 2h3a2 2 0 012 2z"/><circle cx="12" cy="13" r="3"/></svg>'
+};
+function postfachIcon(type){ return POSTFACH_ICONS[type] || POSTFACH_ICONS.week; }
+function renderPostfach(){
+  const list = document.getElementById('postfachList');
+  if(!list) return;
+  if(postfach.length===0){ list.innerHTML = '<p class="postfach-empty">'+t('postfachEmpty')+'</p>'; return; }
+  list.innerHTML = postfach.map(m=>{
+    return '<div class="postfach-item'+(m.read?'':' unread')+'" data-id="'+m.id+'">'
+      + '<div class="postfach-item-icon">'+postfachIcon(m.type)+'</div>'
+      + '<div class="postfach-item-body"><div class="postfach-item-title">'+esc(m.title)+'</div><div class="postfach-item-text">'+esc(m.text)+'</div><div class="postfach-item-time">'+new Date(m.createdAt).toLocaleString(curLocale())+'</div></div>'
+      + '<button class="postfach-item-del" onclick="deletePostfachMessage(\''+m.id+'\')" aria-label="L\u00f6schen">&times;</button>'
+      + '</div>';
+  }).join('');
+}
+document.getElementById('mailboxBtn').addEventListener('click', ()=>{
+  const ov = document.getElementById('postfachOverlay');
+  renderPostfach();
+  ov.classList.add('open'); pushModalState();
+  markAllPostfachRead();
+  genieOpenEl(ov.querySelector('.modal'), document.getElementById('mailboxBtn'));
+});
+document.getElementById('closePostfach').addEventListener('click', ()=>{ closeOverlay('postfachOverlay'); });
+document.getElementById('postfachClearBtn').addEventListener('click', ()=>{ clearPostfach(); });
+
+function isWholeWeekAbsent(){
+  const { start } = getWeekRange(0);
+  for(let i=0;i<5;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    const s = getDayStatus(todayStr(d));
+    if(!s || (s!=='krank' && s!=='urlaub' && s!=='schule')) return false;
+  }
+  return true;
+}
+function checkUrgentPostfach(){
+  const hours = settings.urgentReminderHours || 4;
+  if(isTodayAbsent()) return;
+  const overdue = activeTasks().filter(t=>!t.done && t.priority==='urgent' && (Date.now()-t.createdAt) > hours*3600000);
+  overdue.forEach(task=>{
+    const dedupe = 'urgent-'+task.id+'-'+todayStr();
+    addPostfachMessage('urgent', t('pfUrgentTitle'), t('urgentBannerSingle').replace('{hours}', hours).replace('{title}', task.title), dedupe);
+  });
+}
+function checkBerichtsheftPostfach(){
+  if(settings.role !== 'azubi') return;
+  const now = new Date();
+  if(now.getDay() !== 5 || now.getHours() < 13) return;
+  const weekKey = getISOWeekKey(now);
+  addPostfachMessage('berichtsheft', t('pfBerichtsheftTitle'), t('pfBerichtsheftText'), 'berichtsheft-'+weekKey);
+}
+function checkWeekRecapPostfach(){
+  const now = new Date();
+  if(now.getDay() !== 5) return;
+  if(now.getHours() < 14 || (now.getHours() === 14 && now.getMinutes() < 30)) return;
+  const weekKey = getISOWeekKey(now);
+  const dedupe = 'week-'+weekKey;
+  if(postfach.some(m=>m.dedupeKey===dedupe)) return;
+  if(isWholeWeekAbsent()) return;
+  const { start, end } = getWeekRange(0);
+  const doneInWeek = activeTasks().filter(tk=>tk.done && tk.completedAt && tk.completedAt >= start.getTime() && tk.completedAt <= end.getTime());
+  const points = doneInWeek.reduce((sum,tk)=>sum+(POINTS_MAP[tk.priority||'soon']||0),0);
+  const text = doneInWeek.length===0 ? t('pfWeekTextNone') : t('pfWeekTextTemplate').replace('{count}', doneInWeek.length).replace('{points}', points);
+  addPostfachMessage('week', t('pfWeekTitle'), text, dedupe);
+}
+function checkBackupPostfach(){
+  const now = new Date();
+  const monthKey = now.getFullYear()+'-'+now.getMonth();
+  const dedupe = 'backup-'+monthKey;
+  if(postfach.some(m=>m.dedupeKey===dedupe)) return;
+  if(tasks.length===0) return;
+  addPostfachMessage('backup', t('pfBackupTitle'), t('pfBackupText'), dedupe);
+}
+function checkPostfachTriggers(){
+  checkUrgentPostfach();
+  checkBerichtsheftPostfach();
+  checkWeekRecapPostfach();
+  checkBackupPostfach();
 }
 
 function isTodayAbsent(){ const s = getDayStatus(todayStr()); return s === 'krank' || s === 'urlaub' || s === 'schule'; }
@@ -3601,6 +3688,8 @@ function initApp(){
   loadAll();
   purgeOldTrash();
   tickClock();
+  checkPostfachTriggers();
+  renderPostfachBadge();
   applyProfilePhoto();
   ensureFirstUseDate();
   setupAutocompletes();
