@@ -245,8 +245,9 @@
   .bulk-bar.show{display:flex;}
   .bulk-bar button{background:rgba(255,255,255,0.12);color:#fff;border:none;border-radius:7px;padding:7px 13px;font-size:12.5px;font-weight:600;}
 
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:14px;z-index:120;opacity:0;pointer-events:none;transition:opacity .2s;}
-  .toast.show{opacity:1;pointer-events:auto;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(14px) scale(.96);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:14px;z-index:120;opacity:0;pointer-events:none;transition:opacity .28s cubic-bezier(.17,.67,.3,1), transform .32s cubic-bezier(.34,1.56,.64,1);}
+  .toast.show{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0) scale(1);}
+  @media (prefers-reduced-motion: reduce){.toast{transition:opacity .2s;transform:translateX(-50%) !important;}}
   .toast button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:5px 11px;font-size:12px;font-weight:600;}
 
   .empty{text-align:center;padding:50px 20px;color:var(--text-faint);}
@@ -353,8 +354,39 @@
   .modal.fx-flip-closing, [id^="view-"].fx-flip-closing{animation:fxFlipClose .32s ease-in forwards;pointer-events:none;}
   .modal.fx-flip-opening, [id^="view-"].fx-flip-opening{animation:fxFlipOpen .36s cubic-bezier(.17,.67,.3,1) forwards;}
 
+  /* ---------- Feinschliff: Eintritts- & Mikro-Animationen ---------- */
+  @keyframes taskEnter{0%{opacity:0;transform:translateY(9px) scale(.98);}100%{opacity:1;transform:translateY(0) scale(1);}}
+  .task-wrap.enter, .enter{animation:taskEnter .34s cubic-bezier(.17,.67,.3,1) both;}
+
+  @media (hover:hover) and (pointer:fine){
+    .task:hover, .stat:hover, .chart-card:hover, .section-card:hover, .trash-item:hover, .appt-item:hover, .settings-cat-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 4px 8px rgba(28,30,38,0.05), 0 16px 34px rgba(28,30,38,0.11);
+    }
+    [data-theme="dark"] .task:hover, [data-theme="dark"] .stat:hover, [data-theme="dark"] .chart-card:hover, [data-theme="dark"] .section-card:hover, [data-theme="dark"] .trash-item:hover, [data-theme="dark"] .appt-item:hover, [data-theme="dark"] .settings-cat-btn:hover{
+      box-shadow:0 4px 8px rgba(0,0,0,0.25), 0 16px 34px rgba(0,0,0,0.4);
+    }
+    .chart-card, .section-card{transition:transform .18s cubic-bezier(.17,.67,.3,1), box-shadow .18s ease;}
+    .sb-plus-circle:hover{transform:scale(1.06);}
+    .icon-menu-btn:hover, .mailbox-btn:hover{transform:translateY(-1px);}
+  }
+
+  @keyframes prioPulse{0%{transform:scale(1);}40%{transform:scale(1.07);}100%{transform:scale(1);}}
+  .prio-tile.pulse{animation:prioPulse .32s cubic-bezier(.34,1.56,.64,1);}
+
+  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  .empty-icon{animation:floatY 3.2s ease-in-out infinite;}
+
+  @keyframes dotPulseRing{0%{box-shadow:0 0 0 0 rgba(255,107,87,0.55);}100%{box-shadow:0 0 0 8px rgba(255,107,87,0);}}
+  .mailbox-dot.show{animation:dotPulseRing 1.6s ease-out infinite;}
+
+  .points-bar-fill{transition:width .6s cubic-bezier(.17,.67,.3,1);}
+  .avatar-circle{transition:box-shadow .25s ease, border-color .25s ease;}
+
   @media (prefers-reduced-motion: reduce){
     .modal[class*="fx-"], [id^="view-"][class*="fx-"]{animation:none !important;}
+    .task-wrap.enter, .enter, .prio-tile.pulse, .empty-icon, .mailbox-dot.show{animation:none !important;}
+    .task:hover, .stat:hover, .chart-card:hover, .section-card:hover, .trash-item:hover, .appt-item:hover, .settings-cat-btn:hover{transform:none;}
   }
 
   .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
@@ -1135,6 +1167,37 @@ const LIFETIME_KEY = 'aufgaben-tracker-lifetime-erledigt';
 const BACKUP_REMINDER_MS = 14 * 24 * 60 * 60 * 1000;
 const ARCHIVE_MS = 60 * 24 * 60 * 60 * 1000;
 const TRASH_MS = 30 * 24 * 60 * 60 * 1000;
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Feinschliff-Helfer: Eintritts-Animation & Zahlen-Count-up ---------- */
+function staggerEntrance(container, selector, stepMs, maxMs){
+  if(!container || REDUCED_MOTION) return;
+  const items = container.querySelectorAll(selector || '.task-wrap');
+  items.forEach((el, i)=>{
+    el.style.animationDelay = Math.min(i * (stepMs || 26), maxMs || 260) + 'ms';
+    el.classList.add('enter');
+  });
+}
+function animateNumber(el, target, opts){
+  if(!el) return;
+  target = Number(target) || 0;
+  if(REDUCED_MOTION){ el.textContent = String(target); return; }
+  const decimals = (opts && opts.decimals) || 0;
+  const suffix = (opts && opts.suffix) || '';
+  const duration = (opts && opts.duration) || 550;
+  const start = parseFloat((el.dataset.animVal !== undefined ? el.dataset.animVal : el.textContent).toString().replace(',', '.')) || 0;
+  if(start === target){ el.textContent = target.toFixed(decimals) + suffix; el.dataset.animVal = target; return; }
+  const t0 = performance.now();
+  function easeOutCubic(x){ return 1 - Math.pow(1 - x, 3); }
+  function frame(now){
+    const p = Math.min(1, (now - t0) / duration);
+    const eased = easeOutCubic(p);
+    const val = start + (target - start) * eased;
+    el.textContent = val.toFixed(decimals) + suffix;
+    if(p < 1){ requestAnimationFrame(frame); } else { el.textContent = target.toFixed(decimals) + suffix; el.dataset.animVal = target; }
+  }
+  requestAnimationFrame(frame);
+}
 
 let tasks = [];
 let appointments = [];
@@ -2018,7 +2081,14 @@ function setViewIntro(view){
 /* ---------- Tasks ---------- */
 function setPriorityTile(value){
   document.getElementById('priorityInput').value = value;
-  document.querySelectorAll('#prioTiles .prio-tile').forEach(b=>b.classList.toggle('active', b.dataset.value===value));
+  document.querySelectorAll('#prioTiles .prio-tile').forEach(b=>{
+    const wasActive = b.classList.contains('active');
+    const nowActive = b.dataset.value===value;
+    b.classList.toggle('active', nowActive);
+    if(nowActive && !wasActive && !REDUCED_MOTION){
+      b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+    }
+  });
 }
 document.querySelectorAll('#prioTiles .prio-tile').forEach(b=>{
   b.addEventListener('click', ()=>setPriorityTile(b.dataset.value));
@@ -2300,17 +2370,17 @@ function activeTasks(){ return tasks.filter(t=>!t.trashed); }
 
 function renderDashboard(){
   renderGreeting();
-  document.getElementById('dashStatLifetime').textContent = getLifetimeCompleted();
+  animateNumber(document.getElementById('dashStatLifetime'), getLifetimeCompleted());
   const at = activeTasks();
   const openCount = at.filter(t=>!t.done).length;
   const doneCount = at.filter(t=>t.done).length;
-  document.getElementById('dashStatOpen').textContent = openCount;
-  document.getElementById('dashStatDone').textContent = doneCount;
+  animateNumber(document.getElementById('dashStatOpen'), openCount);
+  animateNumber(document.getElementById('dashStatDone'), doneCount);
   const today = todayStr();
   const yesterday = todayStr(new Date(Date.now()-24*60*60*1000));
   const doneToday = at.filter(t=>t.completedAt && todayStr(new Date(t.completedAt))===today).length;
   const doneYesterday = at.filter(t=>t.completedAt && todayStr(new Date(t.completedAt))===yesterday).length;
-  document.getElementById('dashStatToday').textContent = doneToday;
+  animateNumber(document.getElementById('dashStatToday'), doneToday);
   const trendEl = document.getElementById('dashTrend');
   const diff = doneToday - doneYesterday;
   if(diff > 0){ trendEl.textContent = '\u2191 '+diff+' mehr als gestern'; trendEl.className = 'trend up'; }
@@ -2342,6 +2412,7 @@ function renderDashUrgentList(at){
           + '</div>';
       }).join('')
     + (open.length > top.length ? '<p class="setting-hint">'+t('dashMoreUrgent').replace('{n}', open.length-top.length)+'</p>' : '');
+  staggerEntrance(el, '.task');
 }
 
 
@@ -2361,7 +2432,7 @@ function renderPointsCard(){
   const counts = { urgent:0, soon:0, relaxed:0 };
   doneInWeek.forEach(t=>{ counts[t.priority||'soon']++; });
   const total = counts.urgent*POINTS_MAP.urgent + counts.soon*POINTS_MAP.soon + counts.relaxed*POINTS_MAP.relaxed;
-  document.getElementById('pointsTotal').textContent = total;
+  animateNumber(document.getElementById('pointsTotal'), total);
   const rows = [
     [t('prioUrgent'), counts.urgent, POINTS_MAP.urgent, 'var(--danger)'],
     [t('prioSoon'), counts.soon, POINTS_MAP.soon, 'var(--highlight-dark)'],
@@ -2387,18 +2458,36 @@ function drawRing(openCount, doneCount){
   const size = 110;
   canvas.width = size*dpr; canvas.height = size*dpr;
   canvas.style.width = size+'px'; canvas.style.height = size+'px';
-  const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr); ctx.clearRect(0,0,size,size);
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
   const total = openCount + doneCount;
   const pct = total===0 ? 0 : doneCount/total;
   const styles = getComputedStyle(document.documentElement);
+  const lineColor = styles.getPropertyValue('--paper-line').trim();
+  const fillColor = styles.getPropertyValue('--success').trim();
   const cx = size/2, cy = size/2, r = 44;
-  ctx.strokeStyle = styles.getPropertyValue('--paper-line').trim(); ctx.lineWidth = 12;
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
-  if(pct > 0){
-    ctx.strokeStyle = styles.getPropertyValue('--success').trim(); ctx.lineWidth = 12; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2, -Math.PI/2 + pct*Math.PI*2); ctx.stroke();
+  const labelEl = document.getElementById('ringLabel');
+  function paint(curPct){
+    ctx.clearRect(0,0,size,size);
+    ctx.strokeStyle = lineColor; ctx.lineWidth = 12;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    if(curPct > 0){
+      ctx.strokeStyle = fillColor; ctx.lineWidth = 12; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2, -Math.PI/2 + curPct*Math.PI*2); ctx.stroke();
+    }
   }
-  document.getElementById('ringLabel').textContent = Math.round(pct*100)+'%';
+  if(REDUCED_MOTION){ paint(pct); if(labelEl) labelEl.textContent = Math.round(pct*100)+'%'; return; }
+  const startPct = parseFloat(canvas.dataset.animPct || '0') || 0;
+  const t0 = performance.now(); const duration = 650;
+  function easeOutCubic(x){ return 1 - Math.pow(1 - x, 3); }
+  function frame(now){
+    const p = Math.min(1, (now - t0) / duration);
+    const eased = easeOutCubic(p);
+    const curPct = startPct + (pct - startPct) * eased;
+    paint(curPct);
+    if(labelEl) labelEl.textContent = Math.round(curPct*100)+'%';
+    if(p < 1){ requestAnimationFrame(frame); } else { canvas.dataset.animPct = pct; }
+  }
+  requestAnimationFrame(frame);
 }
 
 function renderUrgentBanner(){
@@ -2448,6 +2537,7 @@ function renderTasksView(){
   }).join('');
   attachDragHandlers();
   attachSwipeHandlers();
+  staggerEntrance(listEl, '.task-wrap');
 }
 
 function renderDoneList(listEl, hintEl){
@@ -2482,6 +2572,7 @@ function renderDoneList(listEl, hintEl){
     '<div class="group"><p class="group-title">'+esc(c.label)+' &middot; '+c.items.length+'</p>'+c.items.map(task=>taskRowHtml(task,'done')).join('')+'</div>'
   ).join('');
   attachSwipeHandlers();
+  staggerEntrance(listEl, '.task-wrap');
 }
 
 function renderTrashView(){
@@ -2497,6 +2588,7 @@ function renderTrashView(){
       + '<button class="btn-purge" onclick="purgeTask(\''+task.id+'\')" aria-label="'+t('btnPurge')+'" title="'+t('btnPurge')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg></button>'
       + '</div></div>';
   }).join('');
+  staggerEntrance(el, '.trash-item');
 }
 
 /* ---------- Notizen ---------- */
@@ -2515,6 +2607,7 @@ function renderNotesView(){
       + '<button class="note-delete-btn danger" data-id="'+n.id+'" aria-label="'+t('btnDeleteNote')+'" title="'+t('btnDeleteNote')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg></button>'
       + '</div></div></div>';
   }).join('');
+  staggerEntrance(el, '.note-item');
 }
 function addNote(){
   const input = document.getElementById('notesNewInput');
@@ -2911,14 +3004,26 @@ function drawChart(){
   const accentColor = styles.getPropertyValue('--accent').trim() || '#5b5fef';
   const successColor = styles.getPropertyValue('--success').trim() || '#1d9e75';
   const textColor = styles.getPropertyValue('--text-faint').trim() || '#a3a196';
-  ctx.font = '10px Inter, sans-serif'; ctx.fillStyle = textColor; ctx.textAlign = 'center';
-  days.forEach((d,i)=>{
-    const cx = i*slot + slot/2;
-    const hCreated = (d.created/maxVal) * chartH, hCompleted = (d.completed/maxVal) * chartH;
-    ctx.fillStyle = accentColor; ctx.fillRect(cx - barW - 2, chartH - hCreated, barW, hCreated);
-    ctx.fillStyle = successColor; ctx.fillRect(cx + 2, chartH - hCompleted, barW, hCompleted);
-    if(i % 2 === 0){ ctx.fillStyle = textColor; ctx.fillText(d.label, cx, chartH + 15); }
-  });
+  function paint(progress){
+    ctx.clearRect(0,0,cssWidth,cssHeight);
+    ctx.font = '10px Inter, sans-serif'; ctx.fillStyle = textColor; ctx.textAlign = 'center';
+    days.forEach((d,i)=>{
+      const cx = i*slot + slot/2;
+      const hCreated = (d.created/maxVal) * chartH * progress, hCompleted = (d.completed/maxVal) * chartH * progress;
+      ctx.fillStyle = accentColor; ctx.fillRect(cx - barW - 2, chartH - hCreated, barW, hCreated);
+      ctx.fillStyle = successColor; ctx.fillRect(cx + 2, chartH - hCompleted, barW, hCompleted);
+      if(i % 2 === 0){ ctx.fillStyle = textColor; ctx.fillText(d.label, cx, chartH + 15); }
+    });
+  }
+  if(REDUCED_MOTION){ paint(1); return; }
+  const t0 = performance.now(); const duration = 520;
+  function easeOutCubic(x){ return 1 - Math.pow(1 - x, 3); }
+  function frame(now){
+    const p = Math.min(1, (now - t0) / duration);
+    paint(easeOutCubic(p));
+    if(p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 }
 
 function drawPie(){
