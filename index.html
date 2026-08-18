@@ -100,6 +100,16 @@
   .mailbox-btn svg{width:17px;height:17px;}
   .mailbox-dot{position:absolute;top:5px;right:5px;width:9px;height:9px;border-radius:50%;background:var(--danger);border:2px solid var(--paper);display:none;}
   .mailbox-dot.show{display:block;}
+  .streak-badge{position:absolute;bottom:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:#f0932b;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--paper);}
+  .streak-badge.show{display:flex;}
+  .streak-flame-big{width:64px;height:64px;color:#f0932b;filter:drop-shadow(0 4px 10px rgba(240,147,43,0.4));}
+  .streak-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 4px 4px;}
+  .streak-num{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:800;color:#f0932b;margin:8px 0 2px;line-height:1;}
+  .streak-sub{color:var(--text-sub);font-size:13px;margin:0 0 18px;}
+  .streak-stats-row{display:flex;gap:10px;width:100%;}
+  .streak-stat-box{flex:1;background:var(--paper-2);border-radius:var(--radius-sm);padding:12px;text-align:center;}
+  .streak-stat-box .num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;}
+  .streak-stat-box .label{font-size:11.5px;color:var(--text-sub);margin-top:2px;}
   .postfach-list{display:flex;flex-direction:column;gap:10px;}
   .postfach-item{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:var(--radius-sm);background:var(--paper-2);border:1px solid var(--paper-line);position:relative;}
   .postfach-item.unread{box-shadow:inset 3px 0 0 var(--accent);}
@@ -645,6 +655,10 @@
           <div><p class="view-title" id="greetingTitle">TaskHub</p><p class="view-sub" id="greetingSub">Dein &Uuml;berblick f&uuml;r heute.</p></div>
         </div>
         <div class="header-actions">
+          <button class="mailbox-btn" id="streakBtn" aria-label="Serie" title="Serie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>
+            <span class="streak-badge" id="streakBadge">0</span>
+          </button>
           <button class="mailbox-btn" id="mailboxBtn" aria-label="Briefkasten" title="Briefkasten">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6z"/><path d="M2 6l10 7 10-7"/></svg>
             <span class="mailbox-dot" id="mailboxDot"></span>
@@ -974,6 +988,24 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="streakOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 data-i18n="streakTitle">Serie</h2>
+      <button class="modal-close" id="closeStreak">&times;</button>
+    </div>
+    <div class="streak-hero">
+      <svg class="streak-flame-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>
+      <div class="streak-num" id="streakBigNum">0</div>
+      <p class="streak-sub" id="streakBigSub"></p>
+      <div class="streak-stats-row">
+        <div class="streak-stat-box"><div class="num" id="streakBestNum">0</div><div class="label" data-i18n="streakBest">Beste Serie</div></div>
+        <div class="streak-stat-box"><div class="num" id="streakTodayNum">0</div><div class="label" data-i18n="streakToday">Heute erledigt</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settingsOverlay">
   <div class="modal">
     <div class="modal-head">
@@ -1214,7 +1246,7 @@ let openTaskId = null;
 let postfach = [];
 
 /* ---------- Modal-Navigation (verhindert App-Exit beim Zur\u00fcck-Button) ---------- */
-const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay','postfachOverlay'];
+const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay','postfachOverlay','streakOverlay'];
 let modalOpen = false;
 function pushModalState(){
   if(!modalOpen){
@@ -1420,6 +1452,11 @@ de: {
   trashDaysLeft:'{n} Tage bis endg\u00fcltigem L\u00f6schen', btnRestore:'Wiederherstellen', btnPurge:'Endg\u00fcltig l\u00f6schen',
   dayYesterday:'Gestern', groupOlder:'\u00c4lter',
   postfachTitle:'Briefkasten', postfachEmpty:'Noch keine Nachrichten.', postfachClearBtn:'Alle l\u00f6schen',
+  streakTitle:'Serie', streakBest:'Beste Serie', streakToday:'Heute erledigt',
+  streakSub0:'Noch keine Serie \u2013 erledige heute deine erste Aufgabe!',
+  streakSub1:'Tag am St\u00fcck. Weiter so!',
+  streakSubN:'Tage am St\u00fcck. Stark!',
+  streakSubHigh:'Tage am St\u00fcck \u2013 richtig stark! \ud83d\udd25',
   pfUrgentTitle:'Dringende Aufgabe', pfBerichtsheftTitle:'Berichtsheft', pfBerichtsheftText:'Vergiss nicht, dein Berichtsheft f\u00fcr diese Woche zu schreiben.',
   pfWeekTitle:'Wochenr\u00fcckblick', pfWeekTextTemplate:'Diese Woche hast du {count} Aufgabe(n) erledigt ({points} Punkte).', pfWeekTextNone:'Diese Woche hast du noch keine Aufgabe erledigt.',
   pfBackupTitle:'Backup-Erinnerung', pfBackupText:'Zeit f\u00fcr dein monatliches Backup \u2013 sichere deine Aufgaben als Datei.'
@@ -1523,6 +1560,11 @@ en: {
   trashDaysLeft:'{n} days until permanently deleted', btnRestore:'Restore', btnPurge:'Delete permanently',
   dayYesterday:'Yesterday', groupOlder:'Older',
   postfachTitle:'Inbox', postfachEmpty:'No messages yet.', postfachClearBtn:'Clear all',
+  streakTitle:'Streak', streakBest:'Best streak', streakToday:'Done today',
+  streakSub0:'No streak yet \u2013 complete your first task today!',
+  streakSub1:'day in a row. Keep going!',
+  streakSubN:'days in a row. Nice!',
+  streakSubHigh:'days in a row \u2013 amazing! \ud83d\udd25',
   pfUrgentTitle:'Urgent task', pfBerichtsheftTitle:'Work journal', pfBerichtsheftText:'Don\u2019t forget to fill in your work journal for this week.',
   pfWeekTitle:'Weekly recap', pfWeekTextTemplate:'You completed {count} task(s) this week ({points} points).', pfWeekTextNone:'You haven\u2019t completed any tasks this week yet.',
   pfBackupTitle:'Backup reminder', pfBackupText:'Time for your monthly backup \u2013 save your tasks as a file.'
@@ -1626,6 +1668,11 @@ fa: {
   trashDaysLeft:'{n} روز تا حذف قطعی', btnRestore:'بازیابی', btnPurge:'حذف قطعی',
   dayYesterday:'دیروز', groupOlder:'قدیمی‌تر',
   postfachTitle:'صندوق پیام', postfachEmpty:'هنوز پیامی وجود ندارد.', postfachClearBtn:'حذف همه',
+  streakTitle:'روند', streakBest:'بهترین روند', streakToday:'امروز انجام شد',
+  streakSub0:'هنوز روندی وجود ندارد \u2013 اولین وظیفه امروز را انجام دهید!',
+  streakSub1:'روز پیاپی. ادامه بده!',
+  streakSubN:'روز پیاپی. عالی!',
+  streakSubHigh:'روز پیاپی \u2013 فوق‌العاده! \ud83d\udd25',
   pfUrgentTitle:'وظیفه فوری', pfBerichtsheftTitle:'گزارش کار', pfBerichtsheftText:'فراموش نکنید گزارش کار این هفته را بنویسید.',
   pfWeekTitle:'مرور هفته', pfWeekTextTemplate:'این هفته {count} وظیفه را انجام دادید ({points} امتیاز).', pfWeekTextNone:'این هفته هنوز هیچ وظیفه‌ای انجام نداده‌اید.',
   pfBackupTitle:'یادآوری پشتیبان‌گیری', pfBackupText:'وقت پشتیبان‌گیری ماهانه است \u2013 وظایف خود را به صورت فایل ذخیره کنید.'
@@ -2370,6 +2417,7 @@ function taskRowHtml(t, key){
 
 function render(){
   purgeOldTrash();
+  renderStreakBadge();
   if(currentView === 'dashboard') renderDashboard();
   else if(currentView === 'tasks') renderTasksView();
   else if(currentView === 'calendar') renderCalendar();
@@ -3841,6 +3889,85 @@ function checkPostfachTriggers(){
   checkBackupPostfach();
 }
 
+/* ---------- Serie / Streak ---------- */
+function isAbsentDayKey(key){ const s = getDayStatus(key); return s === 'krank' || s === 'urlaub' || s === 'schule'; }
+function isWorkDayKey(key){
+  const d = new Date(key+'T00:00:00');
+  const map = ['sun','mon','tue','wed','thu','fri','sat'];
+  return !!(getWorkHours()[map[d.getDay()]]);
+}
+function getCompletedDateSet(){
+  const set = new Set();
+  tasks.forEach(t=>{ if(t.completedAt) set.add(todayStr(new Date(t.completedAt))); });
+  return set;
+}
+function computeCurrentStreak(completedDates){
+  let streak = 0;
+  const cursor = new Date(); cursor.setHours(0,0,0,0);
+  const todayKey = todayStr(cursor);
+  if(!completedDates.has(todayKey) && isWorkDayKey(todayKey) && !isAbsentDayKey(todayKey)){
+    cursor.setDate(cursor.getDate()-1);
+  }
+  let guard = 0;
+  while(guard < 1000){
+    guard++;
+    const key = todayStr(cursor);
+    if(completedDates.has(key)){ streak++; cursor.setDate(cursor.getDate()-1); continue; }
+    if(isAbsentDayKey(key) || !isWorkDayKey(key)){ cursor.setDate(cursor.getDate()-1); continue; }
+    break;
+  }
+  return streak;
+}
+function computeStreakStats(){
+  const completedDates = getCompletedDateSet();
+  const current = computeCurrentStreak(completedDates);
+  let best = current;
+  if(completedDates.size){
+    const allDates = Array.from(completedDates).sort();
+    const cursor = new Date(allDates[0]+'T00:00:00');
+    const yesterday = new Date(); yesterday.setHours(0,0,0,0); yesterday.setDate(yesterday.getDate()-1);
+    let run = 0, guard = 0;
+    while(cursor <= yesterday && guard < 3000){
+      guard++;
+      const key = todayStr(cursor);
+      if(completedDates.has(key)){ run++; if(run>best) best=run; }
+      else if(!(isAbsentDayKey(key) || !isWorkDayKey(key))){ run = 0; }
+      cursor.setDate(cursor.getDate()+1);
+    }
+  }
+  return { current, best };
+}
+function renderStreakBadge(){
+  const badge = document.getElementById('streakBadge');
+  if(!badge) return;
+  const { current } = computeStreakStats();
+  badge.textContent = String(current);
+  badge.classList.toggle('show', current > 0);
+}
+function streakSubText(n){
+  if(n<=0) return t('streakSub0');
+  if(n===1) return n+' '+t('streakSub1');
+  if(n>=14) return n+' '+t('streakSubHigh');
+  return n+' '+t('streakSubN');
+}
+function renderStreakModal(){
+  const { current, best } = computeStreakStats();
+  const at = activeTasks();
+  const today = todayStr();
+  const doneToday = at.filter(tk=>tk.completedAt && todayStr(new Date(tk.completedAt))===today).length;
+  document.getElementById('streakBigNum').textContent = current;
+  document.getElementById('streakBigSub').textContent = streakSubText(current);
+  document.getElementById('streakBestNum').textContent = best;
+  document.getElementById('streakTodayNum').textContent = doneToday;
+}
+document.getElementById('streakBtn').addEventListener('click', ()=>{
+  const ov = document.getElementById('streakOverlay');
+  renderStreakModal();
+  ov.classList.add('open'); pushModalState();
+  genieOpenEl(ov.querySelector('.modal'), document.getElementById('streakBtn'));
+});
+document.getElementById('closeStreak').addEventListener('click', ()=>{ closeOverlay('streakOverlay'); });
+
 function isTodayAbsent(){ const s = getDayStatus(todayStr()); return s === 'krank' || s === 'urlaub' || s === 'schule'; }
 
 function initApp(){
@@ -3849,6 +3976,7 @@ function initApp(){
   tickClock();
   checkPostfachTriggers();
   renderPostfachBadge();
+  renderStreakBadge();
   applyProfilePhoto();
   ensureFirstUseDate();
   setupAutocompletes();
