@@ -60,9 +60,6 @@
   .avatar-circle.tier-bronze{border-color:#c07a3e;box-shadow:0 0 0 2px rgba(192,122,62,0.35);}
   .avatar-circle.tier-silver{border-color:#b7bcc4;box-shadow:0 0 0 2px rgba(183,188,196,0.4);}
   .avatar-circle.tier-gold{border-color:#e0b23a;box-shadow:0 0 0 2px rgba(224,178,58,0.45);}
-  .avatar-wrap{position:relative;display:inline-flex;flex:0 0 auto;}
-  .level-badge{position:absolute;bottom:-3px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--accent);color:#0d0f14;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--page-bg);line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.25);}
-  [data-theme="dark"] .level-badge{border-color:var(--page-bg);}
   .sb-item{width:auto;flex:0 1 84px;padding:8px 4px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#767c8f;margin-bottom:0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;position:relative;transition:color .25s ease;}
   .sb-item svg{width:20px;height:20px;transition:opacity .2s ease,transform .2s ease;}
   .sb-item span{font-size:10px;font-weight:500;text-align:center;line-height:1.2;transition:color .25s ease,font-weight .25s ease;}
@@ -120,7 +117,7 @@
   .bb-cell.preview-ok{background:var(--accent-light);box-shadow:inset 0 0 0 2px var(--accent);}
   .bb-cell.preview-bad{background:#fbdada;box-shadow:inset 0 0 0 2px #e05656;}
   .bb-tray{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:18px;width:min(420px,92vw);margin-left:auto;margin-right:auto;}
-  .bb-tray-slot{flex:1;min-height:78px;display:flex;align-items:center;justify-content:center;background:var(--paper-2);border-radius:var(--radius-sm);padding:6px;}
+  .bb-tray-slot{flex:1;min-height:78px;display:flex;align-items:center;justify-content:center;background:var(--paper-2);border-radius:var(--radius-sm);padding:6px;touch-action:none;cursor:grab;}
   .bb-tray-slot.used{opacity:0.25;}
   .bb-mini-grid{display:grid;gap:2px;width:min-content;touch-action:none;}
   .bb-mini-cell{width:16px;height:16px;border-radius:3px;background:transparent;}
@@ -130,6 +127,7 @@
   .bb-gameover{position:absolute;inset:0;background:rgba(0,0,0,0.55);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;}
   .bb-gameover-title{color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;margin:0;}
   .bb-gameover-score{color:#fff;font-size:14px;margin:0 0 8px;opacity:0.9;}
+  .points-alltime{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-sub);margin-top:4px;}
   .streak-flame-big{width:64px;height:64px;color:#f0932b;filter:drop-shadow(0 4px 10px rgba(240,147,43,0.4));}
   .streak-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 4px 4px;}
   .streak-num{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:800;color:#f0932b;margin:8px 0 2px;line-height:1;}
@@ -679,7 +677,7 @@
     <div id="view-dashboard" style="display:none;">
       <div class="view-head">
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="avatar-wrap"><div class="avatar-circle" id="dashboardAvatar" style="width:44px;height:44px;font-size:17px;">T</div><span class="level-badge" id="dashboardAvatarLevelBadge">1</span></div>
+          <div class="avatar-circle" id="dashboardAvatar" style="width:44px;height:44px;font-size:17px;">T</div>
           <div><p class="view-title" id="greetingTitle">TaskHub</p><p class="view-sub" id="greetingSub">Dein &Uuml;berblick f&uuml;r heute.</p></div>
         </div>
         <div class="header-actions">
@@ -740,6 +738,7 @@
           <div style="text-align:center;margin:10px 0;">
             <div class="stat-num" id="pointsTotal" style="font-size:34px;color:var(--accent);">0</div>
             <div class="stat-label" data-i18n="statPointsWeek">Punkte diese Woche</div>
+            <div class="points-alltime" id="pointsAllTime"></div>
           </div>
           <div id="pointsBreakdown"></div>
           <p class="setting-hint">Dringend = 3 Punkte &middot; Hat noch Zeit = 2 Punkte &middot; Entspannt = 1 Punkt</p>
@@ -1222,7 +1221,7 @@
       <div class="setting-group">
         <div class="setting-label" data-i18n="settingProfilePhoto">Profilbild</div>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="avatar-wrap"><div class="avatar-circle" id="profilePreview" style="margin-bottom:0;width:48px;height:48px;font-size:18px;">T</div><span class="level-badge" id="profilePreviewLevelBadge">1</span></div>
+          <div class="avatar-circle" id="profilePreview" style="margin-bottom:0;width:48px;height:48px;font-size:18px;">T</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label class="btn-secondary" style="text-align:center;cursor:pointer;"><span data-i18n="btnChoosePhoto">Bild ausw&auml;hlen</span><input type="file" id="profilePhotoInput" accept="image/*" style="display:none;"></label>
             <button class="btn-ghost" id="removeProfilePhotoBtn">Entfernen</button>
@@ -1255,7 +1254,6 @@ const WORKDAY_KEYS = ['mon','tue','wed','thu','fri'];
 const WORKDAY_LABELS = { mon:'Montag', tue:'Dienstag', wed:'Mittwoch', thu:'Donnerstag', fri:'Freitag' };
 const FIRST_USE_KEY = 'aufgaben-tracker-erstnutzung';
 const LIFETIME_KEY = 'aufgaben-tracker-lifetime-erledigt';
-const LIFETIME_POINTS_KEY = 'aufgaben-tracker-lifetime-punkte';
 const BACKUP_REMINDER_MS = 14 * 24 * 60 * 60 * 1000;
 const ARCHIVE_MS = 60 * 24 * 60 * 60 * 1000;
 const TRASH_MS = 30 * 24 * 60 * 60 * 1000;
@@ -1459,7 +1457,7 @@ de: {
   phUsername:'Benutzername', phNewPassword:'Neues Passwort',
   statOpen:'offen', statDone:'erledigt', statTodayDone:'heute erledigt', statAvgDays:'∅ Tage bis erledigt', statLifetime:'insgesamt erledigt',
   chartToday:'Heute', chartProgress:'Fortschritt', statAllActiveDone:'aller aktiven Aufgaben erledigt', chartTasksPerDay:'Aufgaben pro Tag (letzte 14 Tage)',
-  statPointsWeek:'Punkte diese Woche', phOrder:'Bestellung / was zum Kunden mitnehmen (Technik, Material...)', phNote:'Notiz (optional)',
+  statPointsWeek:'Punkte diese Woche', statPointsAllTime:'Insgesamt {total} Punkte gesammelt', phOrder:'Bestellung / was zum Kunden mitnehmen (Technik, Material...)', phNote:'Notiz (optional)',
   phAppt:'Termin (z.B. Meeting mit...)', titleStart:'Anfangszeit', titleEnd:'Endzeit',
   apptTypeCustomer:'Kunde', apptTypeInternal:'Intern', apptTypeOther:'Sonstiges', apptNoTask:'Keine Aufgabe verknüpfen',
   absenceRangeDesc:'Wähle den Zeitraum — alle Tage dazwischen werden im Kalender markiert.',
@@ -1569,7 +1567,7 @@ en: {
   phUsername:'Username', phNewPassword:'New password',
   statOpen:'open', statDone:'done', statTodayDone:'done today', statAvgDays:'avg. days to complete', statLifetime:'completed overall',
   chartToday:'Today', chartProgress:'Progress', statAllActiveDone:'of all active tasks done', chartTasksPerDay:'Tasks per day (last 14 days)',
-  statPointsWeek:'Points this week', phOrder:'Order / what to bring to the client (equipment, material...)', phNote:'Note (optional)',
+  statPointsWeek:'Points this week', statPointsAllTime:'{total} points collected in total', phOrder:'Order / what to bring to the client (equipment, material...)', phNote:'Note (optional)',
   phAppt:'Appointment (e.g. meeting with...)', titleStart:'Start time', titleEnd:'End time',
   apptTypeCustomer:'Client', apptTypeInternal:'Internal', apptTypeOther:'Other', apptNoTask:'Don\u2019t link a task',
   absenceRangeDesc:'Choose the date range \u2014 every day in between will be marked in the calendar.',
@@ -1679,7 +1677,7 @@ fa: {
   phUsername:'نام کاربری', phNewPassword:'رمز عبور جدید',
   statOpen:'باز', statDone:'انجام‌شده', statTodayDone:'امروز انجام‌شده', statAvgDays:'میانگین روز تا انجام', statLifetime:'مجموع انجام‌شده',
   chartToday:'امروز', chartProgress:'پیشرفت', statAllActiveDone:'از همه وظایف فعال انجام شده', chartTasksPerDay:'وظایف روزانه (۱۴ روز اخیر)',
-  statPointsWeek:'امتیاز این هفته', phOrder:'سفارش / چه چیزی برای مشتری ببرم (تجهیزات، مواد...)', phNote:'یادداشت (اختیاری)',
+  statPointsWeek:'امتیاز این هفته', statPointsAllTime:'در مجموع {total} امتیاز جمع شده', phOrder:'سفارش / چه چیزی برای مشتری ببرم (تجهیزات، مواد...)', phNote:'یادداشت (اختیاری)',
   phAppt:'قرار (مثلاً جلسه با...)', titleStart:'زمان شروع', titleEnd:'زمان پایان',
   apptTypeCustomer:'مشتری', apptTypeInternal:'داخلی', apptTypeOther:'سایر', apptNoTask:'بدون اتصال به وظیفه',
   absenceRangeDesc:'بازه زمانی را انتخاب کنید — همه روزهای بین آن‌ها در تقویم علامت‌گذاری می‌شوند.',
@@ -2312,7 +2310,7 @@ function toggleDone(id, ev){
   const wrapEl = ev && ev.currentTarget ? ev.currentTarget.closest('.task-wrap') : null;
   const finish = ()=>{
     try{
-      if(nowDone){ incrementLifetimeCompleted(); incrementLifetimePoints(task.priority); renderLevelBadges(); }
+      if(nowDone){ incrementLifetimeCompleted(); }
       if(navigator.vibrate) navigator.vibrate(30);
       if(nowDone){
         const reaction = pickTaskDoneReaction();
@@ -2402,8 +2400,8 @@ document.getElementById('bulkCancelBtn').addEventListener('click', ()=>{
   updateBulkBar(); render();
 });
 document.getElementById('bulkDoneBtn').addEventListener('click', ()=>{
-  tasks.forEach(t=>{ if(selectedIds.has(t.id) && !t.done){ t.done = true; t.completedAt = Date.now(); incrementLifetimeCompleted(); incrementLifetimePoints(t.priority); } });
-  saveTasks(); selectedIds.clear(); updateBulkBar(); render(); setTimeout(maybePerfectDay, 300); renderLevelBadges();
+  tasks.forEach(t=>{ if(selectedIds.has(t.id) && !t.done){ t.done = true; t.completedAt = Date.now(); incrementLifetimeCompleted(); } });
+  saveTasks(); selectedIds.clear(); updateBulkBar(); render(); setTimeout(maybePerfectDay, 300);
 });
 document.getElementById('bulkDeleteBtn').addEventListener('click', ()=>{
   tasks.forEach(t=>{ if(selectedIds.has(t.id)){ t.trashed = true; t.deletedAt = Date.now(); } });
@@ -2536,7 +2534,6 @@ function renderDashboard(){
   }else{ document.getElementById('dashStatAvg').textContent = '\u2013'; }
   renderDashUrgentList(at);
   renderPointsCard();
-  renderLevelBadges();
   drawRing(openCount, doneCount);
   drawChart();
 }
@@ -2591,6 +2588,11 @@ function renderPointsCard(){
       + '</div>';
   }).join('');
   if(pointsWeekOffset === 0){ applyAvatarTier(total); }
+  const allDone = activeTasks().filter(t=>t.done && t.completedAt);
+  const allCounts = { urgent:0, soon:0, relaxed:0 };
+  allDone.forEach(t=>{ allCounts[t.priority||'soon']++; });
+  const allTotal = allCounts.urgent*POINTS_MAP.urgent + allCounts.soon*POINTS_MAP.soon + allCounts.relaxed*POINTS_MAP.relaxed;
+  document.getElementById('pointsAllTime').textContent = t('statPointsAllTime').replace('{total}', allTotal);
 }
 document.getElementById('pointsPrevBtn').addEventListener('click', ()=>{ pointsWeekOffset--; renderPointsCard(); });
 document.getElementById('pointsNextBtn').addEventListener('click', ()=>{ pointsWeekOffset = Math.min(0, pointsWeekOffset+1); renderPointsCard(); });
@@ -3664,28 +3666,6 @@ function incrementLifetimeCompleted(){
 }
 function getLifetimeCompleted(){ return parseInt(localStorage.getItem(LIFETIME_KEY) || '0', 10); }
 
-function incrementLifetimePoints(priority){
-  const add = POINTS_MAP[priority || 'soon'] || 0;
-  const n = parseInt(localStorage.getItem(LIFETIME_POINTS_KEY) || '0', 10) + add;
-  localStorage.setItem(LIFETIME_POINTS_KEY, String(n));
-}
-function getLifetimePoints(){ return parseInt(localStorage.getItem(LIFETIME_POINTS_KEY) || '0', 10); }
-// Level-Schwellen: Level 2 = 200 Pkt, Level 3 = 500 Pkt, Level 4 = 900 Pkt, ...
-// Formel: Schwelle(n) = 100 * (n-1) * (n+2) / 2
-function pointsThresholdForLevel(level){ return Math.round(100 * (level-1) * (level+2) / 2); }
-function levelForPoints(points){
-  let level = 1;
-  while(points >= pointsThresholdForLevel(level+1)){ level++; }
-  return level;
-}
-function renderLevelBadges(){
-  const level = levelForPoints(getLifetimePoints());
-  ['sbLogoLevelBadge','dashboardAvatarLevelBadge','profilePreviewLevelBadge'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.textContent = String(level);
-  });
-}
-
 function getGreeting(){
   const hour = new Date().getHours();
   const now = new Date();
@@ -4112,8 +4092,9 @@ function bbRenderTray(){
     slot.className = 'bb-tray-slot'+(piece.used ? ' used' : '');
     if(!piece.used){
       const mini = bbBuildMiniGrid(piece.shape, piece.color, 16);
+      mini.style.pointerEvents = 'none';
       slot.appendChild(mini);
-      mini.addEventListener('pointerdown', (e)=>bbStartDrag(e, idx));
+      slot.addEventListener('pointerdown', (e)=>bbStartDrag(e, idx));
     }
     el.appendChild(slot);
   });
