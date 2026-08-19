@@ -60,6 +60,9 @@
   .avatar-circle.tier-bronze{border-color:#c07a3e;box-shadow:0 0 0 2px rgba(192,122,62,0.35);}
   .avatar-circle.tier-silver{border-color:#b7bcc4;box-shadow:0 0 0 2px rgba(183,188,196,0.4);}
   .avatar-circle.tier-gold{border-color:#e0b23a;box-shadow:0 0 0 2px rgba(224,178,58,0.45);}
+  .avatar-wrap{position:relative;display:inline-flex;flex:0 0 auto;}
+  .level-badge{position:absolute;bottom:-3px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--accent);color:#0d0f14;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--page-bg);line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+  [data-theme="dark"] .level-badge{border-color:var(--page-bg);}
   .sb-item{width:auto;flex:0 1 84px;padding:8px 4px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#767c8f;margin-bottom:0;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;position:relative;transition:color .25s ease;}
   .sb-item svg{width:20px;height:20px;transition:opacity .2s ease,transform .2s ease;}
   .sb-item span{font-size:10px;font-weight:500;text-align:center;line-height:1.2;transition:color .25s ease,font-weight .25s ease;}
@@ -102,12 +105,37 @@
   .mailbox-dot.show{display:block;}
   .streak-badge{position:absolute;bottom:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:#f0932b;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--paper);}
   .streak-badge.show{display:flex;}
+  .notes-quick-badge{position:absolute;bottom:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--paper);}
+  .notes-quick-badge.show{display:flex;}
+  .bb-topbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;}
+  .bb-score-box{background:var(--paper-2);border-radius:var(--radius-sm);padding:8px 18px;text-align:center;min-width:90px;}
+  .bb-score-box .bb-label{display:block;font-size:11px;color:var(--text-sub);margin-bottom:2px;}
+  .bb-score-box .bb-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;}
+  .bb-restart-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--paper-line);background:var(--paper);color:var(--text-sub);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .bb-restart-btn svg{width:17px;height:17px;}
+  .bb-restart-btn:active{transform:scale(0.92);}
+  .bb-board-wrap{position:relative;width:min(420px,92vw);margin:0 auto;}
+  .bb-board{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:3px;background:var(--paper-2);border-radius:var(--radius-sm);padding:6px;aspect-ratio:1/1;touch-action:none;}
+  .bb-cell{background:var(--paper);border-radius:5px;transition:background .1s;}
+  .bb-cell.preview-ok{background:var(--accent-light);box-shadow:inset 0 0 0 2px var(--accent);}
+  .bb-cell.preview-bad{background:#fbdada;box-shadow:inset 0 0 0 2px #e05656;}
+  .bb-tray{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:18px;width:min(420px,92vw);margin-left:auto;margin-right:auto;}
+  .bb-tray-slot{flex:1;min-height:78px;display:flex;align-items:center;justify-content:center;background:var(--paper-2);border-radius:var(--radius-sm);padding:6px;}
+  .bb-tray-slot.used{opacity:0.25;}
+  .bb-mini-grid{display:grid;gap:2px;width:min-content;touch-action:none;}
+  .bb-mini-cell{width:16px;height:16px;border-radius:3px;background:transparent;}
+  .bb-tray-slot .bb-mini-grid{cursor:grab;}
+  .bb-drag-ghost{position:fixed;display:grid;gap:3px;pointer-events:none;z-index:400;opacity:0.92;}
+  .bb-ghost-cell{border-radius:5px;background:transparent;}
+  .bb-gameover{position:absolute;inset:0;background:rgba(0,0,0,0.55);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;}
+  .bb-gameover-title{color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;margin:0;}
+  .bb-gameover-score{color:#fff;font-size:14px;margin:0 0 8px;opacity:0.9;}
   .streak-flame-big{width:64px;height:64px;color:#f0932b;filter:drop-shadow(0 4px 10px rgba(240,147,43,0.4));}
   .streak-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 4px 4px;}
   .streak-num{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:800;color:#f0932b;margin:8px 0 2px;line-height:1;}
   .streak-sub{color:var(--text-sub);font-size:13px;margin:0 0 18px;}
-  .streak-stats-row{display:flex;gap:10px;width:100%;}
-  .streak-stat-box{flex:1;background:var(--paper-2);border-radius:var(--radius-sm);padding:12px;text-align:center;}
+  .streak-stats-row{display:flex;gap:10px;width:100%;justify-content:center;}
+  .streak-stat-box{flex:0 1 160px;background:var(--paper-2);border-radius:var(--radius-sm);padding:12px;text-align:center;}
   .streak-stat-box .num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;}
   .streak-stat-box .label{font-size:11.5px;color:var(--text-sub);margin-top:2px;}
   .postfach-list{display:flex;flex-direction:column;gap:10px;}
@@ -625,9 +653,9 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
     <span data-i18n="navTrash">Papierkorb</span>
   </button>
-  <button class="sb-item" data-view="notes">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h13l3 3v13a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
-    <span data-i18n="navNotes">Notizen</span>
+  <button class="sb-item" data-view="games">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="11" r="1" fill="currentColor" stroke="none"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+    <span data-i18n="navGames">Spiele</span>
   </button>
   <div class="sb-spacer"></div>
   <button class="sb-item" id="settingsBtn">
@@ -651,10 +679,14 @@
     <div id="view-dashboard" style="display:none;">
       <div class="view-head">
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="avatar-circle" id="dashboardAvatar" style="width:44px;height:44px;font-size:17px;">T</div>
+          <div class="avatar-wrap"><div class="avatar-circle" id="dashboardAvatar" style="width:44px;height:44px;font-size:17px;">T</div><span class="level-badge" id="dashboardAvatarLevelBadge">1</span></div>
           <div><p class="view-title" id="greetingTitle">TaskHub</p><p class="view-sub" id="greetingSub">Dein &Uuml;berblick f&uuml;r heute.</p></div>
         </div>
         <div class="header-actions">
+          <button class="mailbox-btn" id="notesQuickBtn" aria-label="Notizen" title="Notizen" data-i18n-title="navNotes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9l5 5v2"/><path d="M14 3v5h5"/><path d="M8 13h5M8 17h4"/></svg>
+            <span class="notes-quick-badge" id="notesQuickBadge">0</span>
+          </button>
           <button class="mailbox-btn" id="streakBtn" aria-label="Serie" title="Serie">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>
             <span class="streak-badge" id="streakBadge">0</span>
@@ -819,16 +851,27 @@
       <div id="trashList"></div>
     </div>
 
-    <!-- NOTIZEN -->
-    <div id="view-notes" style="display:none;">
-      <div class="view-head"><div><p class="view-title" data-i18n="notesTitle">Notizen</p><p class="view-sub" data-i18n="notesSub">Dein kleines Heft f&uuml;r alles, was sonst nirgends hinpasst.</p></div></div>
-      <div class="add-row">
-        <textarea id="notesNewInput" data-i18n-placeholder="notePlaceholder" placeholder="Neue Notiz..." rows="2"></textarea>
-        <button class="btn-add" id="addNoteBtn" data-i18n="btnAddNote">Hinzuf&uuml;gen</button>
+    <div id="view-games" style="display:none;">
+      <div class="view-head"><div><p class="view-title" data-i18n="gamesTitle">Spiele</p><p class="view-sub" data-i18n="gamesSub">Kleine Pause gef&auml;llig? &ndash; Block Blast</p></div></div>
+      <div class="bb-topbar">
+        <div class="bb-score-box"><span class="bb-label" data-i18n="bbScoreLabel">Punkte</span><span class="bb-num" id="bbScore">0</span></div>
+        <button class="bb-restart-btn" id="bbRestartBtn" aria-label="Neustart" title="Neustart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+        <div class="bb-score-box"><span class="bb-label" data-i18n="bbBestLabel">Bestwert</span><span class="bb-num" id="bbBest">0</span></div>
       </div>
-      <div id="notesList"></div>
+      <div class="bb-board-wrap">
+        <div class="bb-board" id="bbBoard"></div>
+        <div class="bb-gameover" id="bbGameOver" style="display:none;">
+          <p class="bb-gameover-title" data-i18n="bbGameOverTitle">Spiel vorbei!</p>
+          <p class="bb-gameover-score" id="bbFinalScore"></p>
+          <button class="btn-add" id="bbPlayAgainBtn" data-i18n="bbRestart">Neues Spiel</button>
+        </div>
+      </div>
+      <div class="bb-tray" id="bbTray"></div>
     </div>
 
+    <!-- NOTIZEN -->
   </div>
 </div>
 
@@ -1000,9 +1043,23 @@
       <p class="streak-sub" id="streakBigSub"></p>
       <div class="streak-stats-row">
         <div class="streak-stat-box"><div class="num" id="streakBestNum">0</div><div class="label" data-i18n="streakBest">Beste Serie</div></div>
-        <div class="streak-stat-box"><div class="num" id="streakTodayNum">0</div><div class="label" data-i18n="streakToday">Heute erledigt</div></div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="notesOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 data-i18n="notesTitle">Notizen</h2>
+      <button class="modal-close" id="closeNotes">&times;</button>
+    </div>
+    <p class="view-sub" style="margin:-8px 0 14px;" data-i18n="notesSub">Dein kleines Heft f&uuml;r alles, was sonst nirgends hinpasst.</p>
+    <div class="add-row">
+      <textarea id="notesNewInput" data-i18n-placeholder="notePlaceholder" placeholder="Neue Notiz..." rows="2"></textarea>
+      <button class="btn-add" id="addNoteBtn" data-i18n="btnAddNote">Hinzuf&uuml;gen</button>
+    </div>
+    <div id="notesList"></div>
   </div>
 </div>
 
@@ -1165,7 +1222,7 @@
       <div class="setting-group">
         <div class="setting-label" data-i18n="settingProfilePhoto">Profilbild</div>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="avatar-circle" id="profilePreview" style="margin-bottom:0;width:48px;height:48px;font-size:18px;">T</div>
+          <div class="avatar-wrap"><div class="avatar-circle" id="profilePreview" style="margin-bottom:0;width:48px;height:48px;font-size:18px;">T</div><span class="level-badge" id="profilePreviewLevelBadge">1</span></div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label class="btn-secondary" style="text-align:center;cursor:pointer;"><span data-i18n="btnChoosePhoto">Bild ausw&auml;hlen</span><input type="file" id="profilePhotoInput" accept="image/*" style="display:none;"></label>
             <button class="btn-ghost" id="removeProfilePhotoBtn">Entfernen</button>
@@ -1198,6 +1255,7 @@ const WORKDAY_KEYS = ['mon','tue','wed','thu','fri'];
 const WORKDAY_LABELS = { mon:'Montag', tue:'Dienstag', wed:'Mittwoch', thu:'Donnerstag', fri:'Freitag' };
 const FIRST_USE_KEY = 'aufgaben-tracker-erstnutzung';
 const LIFETIME_KEY = 'aufgaben-tracker-lifetime-erledigt';
+const LIFETIME_POINTS_KEY = 'aufgaben-tracker-lifetime-punkte';
 const BACKUP_REMINDER_MS = 14 * 24 * 60 * 60 * 1000;
 const ARCHIVE_MS = 60 * 24 * 60 * 60 * 1000;
 const TRASH_MS = 30 * 24 * 60 * 60 * 1000;
@@ -1246,7 +1304,7 @@ let openTaskId = null;
 let postfach = [];
 
 /* ---------- Modal-Navigation (verhindert App-Exit beim Zur\u00fcck-Button) ---------- */
-const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay','postfachOverlay','streakOverlay'];
+const OVERLAY_IDS = ['detailOverlay','settingsOverlay','bulkAddOverlay','lightboxOverlay','onboardingOverlay','addTaskOverlay','postfachOverlay','streakOverlay','notesOverlay'];
 let modalOpen = false;
 function pushModalState(){
   if(!modalOpen){
@@ -1354,7 +1412,9 @@ const PRIORITY_META = {
 const LOCALE_MAP = { de:'de-DE', en:'en-US', fa:'fa-IR' };
 const TRANSLATIONS = {
 de: {
-  navDashboard:'Dashboard', navTasks:'Aufgaben', navCalendar:'Kalender', navDone:'Fertig', navTrash:'Papierkorb', navNotes:'Notizen', navSettings:'Einstellungen',
+  navDashboard:'Dashboard', navTasks:'Aufgaben', navCalendar:'Kalender', navDone:'Fertig', navTrash:'Papierkorb', navNotes:'Notizen', navSettings:'Einstellungen', navGames:'Spiele',
+  gamesTitle:'Spiele', gamesSub:'Kleine Pause gef\u00e4llig? \u2013 Block Blast',
+  bbScoreLabel:'Punkte', bbBestLabel:'Bestwert', bbRestart:'Neues Spiel', bbGameOverTitle:'Spiel vorbei!', bbFinalScoreText:'{score} Punkte \u2013 Bestwert {best}',
   tasksTitle:'Aufgaben', tasksSub:'Alles, was bei der Arbeit zu tun ist.', phTitle:'Neue Aufgabe eingeben...',
   btnAdd:'Hinzufügen', btnUpdate:'Aktualisieren', btnCancelEdit:'Abbrechen', btnBulkAdd:'+ Mehrere auf einmal', btnSelect:'Auswählen', filterOpen:'Offen', filterAll:'Alle', filterDone:'Fertig', phSearch:'Suchen...',
   addTaskTitle:'Neue Aufgabe',
@@ -1452,7 +1512,7 @@ de: {
   trashDaysLeft:'{n} Tage bis endg\u00fcltigem L\u00f6schen', btnRestore:'Wiederherstellen', btnPurge:'Endg\u00fcltig l\u00f6schen',
   dayYesterday:'Gestern', groupOlder:'\u00c4lter',
   postfachTitle:'Briefkasten', postfachEmpty:'Noch keine Nachrichten.', postfachClearBtn:'Alle l\u00f6schen',
-  streakTitle:'Serie', streakBest:'Beste Serie', streakToday:'Heute erledigt',
+  streakTitle:'Serie', streakBest:'Beste Serie',
   streakSub0:'Noch keine Serie \u2013 erledige heute deine erste Aufgabe!',
   streakSub1:'Tag am St\u00fcck. Weiter so!',
   streakSubN:'Tage am St\u00fcck. Stark!',
@@ -1462,7 +1522,9 @@ de: {
   pfBackupTitle:'Backup-Erinnerung', pfBackupText:'Zeit f\u00fcr dein monatliches Backup \u2013 sichere deine Aufgaben als Datei.'
 },
 en: {
-  navDashboard:'Dashboard', navTasks:'Tasks', navCalendar:'Calendar', navDone:'Done', navTrash:'Trash', navNotes:'Notes', navSettings:'Settings',
+  navDashboard:'Dashboard', navTasks:'Tasks', navCalendar:'Calendar', navDone:'Done', navTrash:'Trash', navNotes:'Notes', navSettings:'Settings', navGames:'Games',
+  gamesTitle:'Games', gamesSub:'Fancy a quick break? \u2013 Block Blast',
+  bbScoreLabel:'Score', bbBestLabel:'Best', bbRestart:'New game', bbGameOverTitle:'Game over!', bbFinalScoreText:'{score} points \u2013 best {best}',
   tasksTitle:'Tasks', tasksSub:'Everything on your work plate.', phTitle:'Add a new task...',
   btnAdd:'Add', btnUpdate:'Update', btnCancelEdit:'Cancel', btnBulkAdd:'+ Add multiple at once', btnSelect:'Select', filterOpen:'Open', filterAll:'All', filterDone:'Done', phSearch:'Search...',
   addTaskTitle:'New task',
@@ -1560,7 +1622,7 @@ en: {
   trashDaysLeft:'{n} days until permanently deleted', btnRestore:'Restore', btnPurge:'Delete permanently',
   dayYesterday:'Yesterday', groupOlder:'Older',
   postfachTitle:'Inbox', postfachEmpty:'No messages yet.', postfachClearBtn:'Clear all',
-  streakTitle:'Streak', streakBest:'Best streak', streakToday:'Done today',
+  streakTitle:'Streak', streakBest:'Best streak',
   streakSub0:'No streak yet \u2013 complete your first task today!',
   streakSub1:'day in a row. Keep going!',
   streakSubN:'days in a row. Nice!',
@@ -1570,7 +1632,9 @@ en: {
   pfBackupTitle:'Backup reminder', pfBackupText:'Time for your monthly backup \u2013 save your tasks as a file.'
 },
 fa: {
-  navDashboard:'داشبورد', navTasks:'وظایف', navCalendar:'تقویم', navDone:'انجام\u200cشده', navTrash:'سطل زباله', navNotes:'یادداشت\u200cها', navSettings:'تنظیمات',
+  navDashboard:'داشبورد', navTasks:'وظایف', navCalendar:'تقویم', navDone:'انجام\u200cشده', navTrash:'سطل زباله', navNotes:'یادداشت\u200cها', navSettings:'تنظیمات', navGames:'بازی\u200cها',
+  gamesTitle:'بازی\u200cها', gamesSub:'یک استراحت کوتاه؟ \u2013 بلاک بلاست',
+  bbScoreLabel:'امتیاز', bbBestLabel:'بهترین', bbRestart:'بازی جدید', bbGameOverTitle:'بازی تمام شد!', bbFinalScoreText:'{score} امتیاز \u2013 بهترین {best}',
   tasksTitle:'وظایف', tasksSub:'همه کارهایی که باید در محل کار انجام شود.', phTitle:'یک وظیفه جدید وارد کنید...',
   btnAdd:'افزودن', btnUpdate:'به‌روزرسانی', btnCancelEdit:'لغو', btnBulkAdd:'+ افزودن چندتایی', btnSelect:'انتخاب', filterOpen:'باز', filterAll:'همه', filterDone:'انجام\u200cشده', phSearch:'جستجو...',
   addTaskTitle:'وظیفه جدید',
@@ -1668,7 +1732,7 @@ fa: {
   trashDaysLeft:'{n} روز تا حذف قطعی', btnRestore:'بازیابی', btnPurge:'حذف قطعی',
   dayYesterday:'دیروز', groupOlder:'قدیمی‌تر',
   postfachTitle:'صندوق پیام', postfachEmpty:'هنوز پیامی وجود ندارد.', postfachClearBtn:'حذف همه',
-  streakTitle:'روند', streakBest:'بهترین روند', streakToday:'امروز انجام شد',
+  streakTitle:'روند', streakBest:'بهترین روند',
   streakSub0:'هنوز روندی وجود ندارد \u2013 اولین وظیفه امروز را انجام دهید!',
   streakSub1:'روز پیاپی. ادامه بده!',
   streakSubN:'روز پیاپی. عالی!',
@@ -2099,13 +2163,15 @@ function setView(view, triggerEl){
   const prevView = currentView;
   const prevEl = document.getElementById('view-'+prevView);
   const nextEl = document.getElementById('view-'+view);
-  const btn = triggerEl || document.querySelector('.sb-item[data-view="'+view+'"]');
+  const navBtn = document.querySelector('.sb-item[data-view="'+view+'"]');
+  const btn = triggerEl || navBtn;
   document.querySelectorAll('.sb-item[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
-  positionActiveOrb(btn, prevView !== null);
+  if(navBtn) positionActiveOrb(navBtn, prevView !== null);
   function activateNext(){
     currentView = view;
-    ['dashboard','tasks','calendar','trash','notes'].forEach(v=>{ document.getElementById('view-'+v).style.display = (v===view) ? '' : 'none'; });
+    ['dashboard','tasks','calendar','trash','games'].forEach(v=>{ document.getElementById('view-'+v).style.display = (v===view) ? '' : 'none'; });
     render();
+    if(view === 'games') bbInit();
     if(nextEl) genieOpenEl(nextEl, btn);
     setViewIntro(view);
   }
@@ -2120,8 +2186,7 @@ function setViewIntro(view){
     dashboard: ['dashboard', 'onb1Title', 'onb1Text'],
     tasks: ['tasks', 'onb2Title', 'onb2Text'],
     calendar: ['calendar', 'onb3Title', 'onb3Text'],
-    trash: ['trash', 'onb4Title', 'onb4Text'],
-    notes: ['notes', 'onb6Title', 'onb6Text']
+    trash: ['trash', 'onb4Title', 'onb4Text']
   };
   const si = sectionIntroMap[view];
   if(si) queueSectionIntro(si[0], t(si[1]), t(si[2]));
@@ -2247,7 +2312,7 @@ function toggleDone(id, ev){
   const wrapEl = ev && ev.currentTarget ? ev.currentTarget.closest('.task-wrap') : null;
   const finish = ()=>{
     try{
-      if(nowDone){ incrementLifetimeCompleted(); }
+      if(nowDone){ incrementLifetimeCompleted(); incrementLifetimePoints(task.priority); renderLevelBadges(); }
       if(navigator.vibrate) navigator.vibrate(30);
       if(nowDone){
         const reaction = pickTaskDoneReaction();
@@ -2337,8 +2402,8 @@ document.getElementById('bulkCancelBtn').addEventListener('click', ()=>{
   updateBulkBar(); render();
 });
 document.getElementById('bulkDoneBtn').addEventListener('click', ()=>{
-  tasks.forEach(t=>{ if(selectedIds.has(t.id) && !t.done){ t.done = true; t.completedAt = Date.now(); incrementLifetimeCompleted(); } });
-  saveTasks(); selectedIds.clear(); updateBulkBar(); render(); setTimeout(maybePerfectDay, 300);
+  tasks.forEach(t=>{ if(selectedIds.has(t.id) && !t.done){ t.done = true; t.completedAt = Date.now(); incrementLifetimeCompleted(); incrementLifetimePoints(t.priority); } });
+  saveTasks(); selectedIds.clear(); updateBulkBar(); render(); setTimeout(maybePerfectDay, 300); renderLevelBadges();
 });
 document.getElementById('bulkDeleteBtn').addEventListener('click', ()=>{
   tasks.forEach(t=>{ if(selectedIds.has(t.id)){ t.trashed = true; t.deletedAt = Date.now(); } });
@@ -2418,12 +2483,26 @@ function taskRowHtml(t, key){
 function render(){
   purgeOldTrash();
   renderStreakBadge();
+  renderNotesQuickBadge();
   if(currentView === 'dashboard') renderDashboard();
   else if(currentView === 'tasks') renderTasksView();
   else if(currentView === 'calendar') renderCalendar();
   else if(currentView === 'trash') renderTrashView();
-  else if(currentView === 'notes') renderNotesView();
 }
+function renderNotesQuickBadge(){
+  const badge = document.getElementById('notesQuickBadge');
+  if(!badge) return;
+  const n = notes.length;
+  badge.textContent = String(n);
+  badge.classList.toggle('show', n > 0);
+}
+document.getElementById('notesQuickBtn').addEventListener('click', ()=>{
+  const ov = document.getElementById('notesOverlay');
+  renderNotesView();
+  ov.classList.add('open'); pushModalState();
+  genieOpenEl(ov.querySelector('.modal'), document.getElementById('notesQuickBtn'));
+});
+document.getElementById('closeNotes').addEventListener('click', ()=>{ closeOverlay('notesOverlay'); });
 
 function activeTasks(){ return tasks.filter(t=>!t.trashed); }
 
@@ -2457,6 +2536,7 @@ function renderDashboard(){
   }else{ document.getElementById('dashStatAvg').textContent = '\u2013'; }
   renderDashUrgentList(at);
   renderPointsCard();
+  renderLevelBadges();
   drawRing(openCount, doneCount);
   drawChart();
 }
@@ -3584,6 +3664,28 @@ function incrementLifetimeCompleted(){
 }
 function getLifetimeCompleted(){ return parseInt(localStorage.getItem(LIFETIME_KEY) || '0', 10); }
 
+function incrementLifetimePoints(priority){
+  const add = POINTS_MAP[priority || 'soon'] || 0;
+  const n = parseInt(localStorage.getItem(LIFETIME_POINTS_KEY) || '0', 10) + add;
+  localStorage.setItem(LIFETIME_POINTS_KEY, String(n));
+}
+function getLifetimePoints(){ return parseInt(localStorage.getItem(LIFETIME_POINTS_KEY) || '0', 10); }
+// Level-Schwellen: Level 2 = 200 Pkt, Level 3 = 500 Pkt, Level 4 = 900 Pkt, ...
+// Formel: Schwelle(n) = 100 * (n-1) * (n+2) / 2
+function pointsThresholdForLevel(level){ return Math.round(100 * (level-1) * (level+2) / 2); }
+function levelForPoints(points){
+  let level = 1;
+  while(points >= pointsThresholdForLevel(level+1)){ level++; }
+  return level;
+}
+function renderLevelBadges(){
+  const level = levelForPoints(getLifetimePoints());
+  ['sbLogoLevelBadge','dashboardAvatarLevelBadge','profilePreviewLevelBadge'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = String(level);
+  });
+}
+
 function getGreeting(){
   const hour = new Date().getHours();
   const now = new Date();
@@ -3890,6 +3992,228 @@ function checkPostfachTriggers(){
 }
 
 /* ---------- Serie / Streak ---------- */
+/* ---------- Block Blast ---------- */
+const BB_KEY = 'aufgaben-tracker-blockblast-highscore';
+const BB_SIZE = 8;
+const BB_COLORS = ['#4a90e2','#9b59b6','#2ecc71','#f39c12','#e74c3c','#1abc9c','#e84393'];
+const BB_SHAPES = [
+  [[0,0]],
+  [[0,0],[0,1]],
+  [[0,0],[1,0]],
+  [[0,0],[0,1],[0,2]],
+  [[0,0],[1,0],[2,0]],
+  [[0,0],[0,1],[0,2],[0,3]],
+  [[0,0],[1,0],[2,0],[3,0]],
+  [[0,0],[0,1],[1,0],[1,1]],
+  [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],
+  [[0,0],[1,0],[1,1]],
+  [[0,0],[0,1],[1,0]],
+  [[0,1],[1,0],[1,1]],
+  [[0,0],[0,1],[1,1]],
+  [[0,0],[0,1],[0,2],[1,0]],
+  [[0,0],[0,1],[0,2],[1,2]],
+  [[0,0],[1,0],[1,1],[1,2]],
+  [[0,2],[1,0],[1,1],[1,2]],
+  [[0,1],[1,0],[1,1],[1,2],[2,1]],
+  [[0,0],[1,0],[2,0],[2,1]],
+  [[0,0],[0,1],[1,1],[2,1]],
+  [[0,0],[0,1],[1,0],[2,0]],
+  [[0,1],[1,1],[2,0],[2,1]]
+];
+let bbBoard = [];
+let bbTray = [];
+let bbScore = 0;
+let bbBest = 0;
+let bbDragState = null;
+let bbInited = false;
+
+function bbLoadBest(){ bbBest = parseInt(localStorage.getItem(BB_KEY)||'0',10) || 0; }
+function bbSaveBest(){ if(bbScore > bbBest){ bbBest = bbScore; try{ localStorage.setItem(BB_KEY, String(bbBest)); }catch(e){} } }
+function bbRandomShape(){ return BB_SHAPES[Math.floor(Math.random()*BB_SHAPES.length)]; }
+function bbRandomColor(){ return BB_COLORS[Math.floor(Math.random()*BB_COLORS.length)]; }
+function bbShapeSize(shape){
+  const maxR = Math.max(...shape.map(c=>c[0]));
+  const maxC = Math.max(...shape.map(c=>c[1]));
+  return { rows: maxR+1, cols: maxC+1 };
+}
+function bbCanPlace(shape, r0, c0){
+  return shape.every(([dr,dc])=>{
+    const r=r0+dr, c=c0+dc;
+    return r>=0 && r<BB_SIZE && c>=0 && c<BB_SIZE && !bbBoard[r][c];
+  });
+}
+function bbCanPlaceAnywhere(shape){
+  for(let r=0;r<BB_SIZE;r++){ for(let c=0;c<BB_SIZE;c++){ if(bbCanPlace(shape,r,c)) return true; } }
+  return false;
+}
+function bbGenerateTray(){
+  bbTray = [0,1,2].map(()=>({ shape: bbRandomShape(), color: bbRandomColor(), used:false }));
+}
+function bbClearLines(){
+  const fullRows = [], fullCols = [];
+  for(let r=0;r<BB_SIZE;r++){ if(bbBoard[r].every(v=>v)) fullRows.push(r); }
+  for(let c=0;c<BB_SIZE;c++){ if(bbBoard.every(row=>row[c])) fullCols.push(c); }
+  fullRows.forEach(r=>{ for(let c=0;c<BB_SIZE;c++) bbBoard[r][c]=null; });
+  fullCols.forEach(c=>{ for(let r=0;r<BB_SIZE;r++) bbBoard[r][c]=null; });
+  return (fullRows.length + fullCols.length) * BB_SIZE;
+}
+function bbNewGame(){
+  bbBoard = Array.from({length:BB_SIZE}, ()=>Array(BB_SIZE).fill(null));
+  bbScore = 0;
+  bbLoadBest();
+  bbGenerateTray();
+  bbRenderBoard();
+  bbRenderTray();
+  bbRenderScore();
+  const go = document.getElementById('bbGameOver');
+  if(go) go.style.display = 'none';
+}
+function bbRenderScore(){
+  const s = document.getElementById('bbScore'); if(s) s.textContent = bbScore;
+  const b = document.getElementById('bbBest'); if(b) b.textContent = Math.max(bbBest, bbScore);
+}
+function bbRenderBoard(){
+  const el = document.getElementById('bbBoard');
+  if(!el) return;
+  el.innerHTML = '';
+  for(let r=0;r<BB_SIZE;r++){
+    for(let c=0;c<BB_SIZE;c++){
+      const cell = document.createElement('div');
+      cell.className = 'bb-cell';
+      cell.dataset.r = r; cell.dataset.c = c;
+      if(bbBoard[r][c]) cell.style.background = bbBoard[r][c];
+      el.appendChild(cell);
+    }
+  }
+}
+function bbBuildMiniGrid(shape, color, cellSizePx){
+  const { rows, cols } = bbShapeSize(shape);
+  const grid = document.createElement('div');
+  grid.className = 'bb-mini-grid';
+  grid.style.gridTemplateRows = 'repeat('+rows+',1fr)';
+  grid.style.gridTemplateColumns = 'repeat('+cols+',1fr)';
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const cell = document.createElement('div');
+      cell.className = 'bb-mini-cell';
+      if(cellSizePx){ cell.style.width = cellSizePx+'px'; cell.style.height = cellSizePx+'px'; }
+      if(shape.some(([sr,sc])=>sr===r&&sc===c)) cell.style.background = color;
+      grid.appendChild(cell);
+    }
+  }
+  return grid;
+}
+function bbRenderTray(){
+  const el = document.getElementById('bbTray');
+  if(!el) return;
+  el.innerHTML = '';
+  bbTray.forEach((piece, idx)=>{
+    const slot = document.createElement('div');
+    slot.className = 'bb-tray-slot'+(piece.used ? ' used' : '');
+    if(!piece.used){
+      const mini = bbBuildMiniGrid(piece.shape, piece.color, 16);
+      slot.appendChild(mini);
+      mini.addEventListener('pointerdown', (e)=>bbStartDrag(e, idx));
+    }
+    el.appendChild(slot);
+  });
+}
+function bbStartDrag(e, trayIndex){
+  e.preventDefault();
+  const piece = bbTray[trayIndex];
+  if(!piece || piece.used) return;
+  const boardEl = document.getElementById('bbBoard');
+  const firstCell = boardEl.querySelector('.bb-cell');
+  const cellSize = firstCell ? firstCell.getBoundingClientRect().width : 40;
+  const { rows, cols } = bbShapeSize(piece.shape);
+  const ghost = bbBuildMiniGrid(piece.shape, piece.color, cellSize);
+  ghost.className = 'bb-drag-ghost';
+  ghost.style.gridTemplateRows = 'repeat('+rows+',1fr)';
+  ghost.style.gridTemplateColumns = 'repeat('+cols+',1fr)';
+  document.body.appendChild(ghost);
+  bbDragState = { trayIndex, piece, ghost, cellSize, rows, cols, lastTarget:null };
+  bbMoveGhost(e.clientX, e.clientY);
+  window.addEventListener('pointermove', bbOnPointerMove);
+  window.addEventListener('pointerup', bbOnPointerUp);
+}
+function bbMoveGhost(x, y){
+  if(!bbDragState) return;
+  const { ghost, cellSize, rows, cols } = bbDragState;
+  const liftY = 78;
+  ghost.style.left = (x - (cols*cellSize)/2) + 'px';
+  ghost.style.top = (y - (rows*cellSize)/2 - liftY) + 'px';
+  bbUpdatePreview(x, y - liftY);
+}
+function bbBoardTargetCell(x, y){
+  const boardEl = document.getElementById('bbBoard');
+  const rect = boardEl.getBoundingClientRect();
+  if(x < rect.left-30 || x > rect.right+30 || y < rect.top-30 || y > rect.bottom+30) return null;
+  const cellW = rect.width / BB_SIZE, cellH = rect.height / BB_SIZE;
+  const { rows, cols } = bbDragState;
+  const localX = x - rect.left - (cols*cellW)/2;
+  const localY = y - rect.top - (rows*cellH)/2;
+  return { r0: Math.round(localY/cellH), c0: Math.round(localX/cellW) };
+}
+function bbUpdatePreview(x, y){
+  document.querySelectorAll('.bb-cell.preview-ok,.bb-cell.preview-bad').forEach(c=>c.classList.remove('preview-ok','preview-bad'));
+  const target = bbBoardTargetCell(x, y);
+  if(!target){ bbDragState.lastTarget = null; return; }
+  const { r0, c0 } = target;
+  const valid = bbCanPlace(bbDragState.piece.shape, r0, c0);
+  bbDragState.lastTarget = valid ? { r0, c0 } : null;
+  bbDragState.piece.shape.forEach(([dr,dc])=>{
+    const r=r0+dr, c=c0+dc;
+    if(r>=0 && r<BB_SIZE && c>=0 && c<BB_SIZE){
+      const cell = document.querySelector('.bb-cell[data-r="'+r+'"][data-c="'+c+'"]');
+      if(cell) cell.classList.add(valid ? 'preview-ok' : 'preview-bad');
+    }
+  });
+}
+function bbOnPointerMove(e){ bbMoveGhost(e.clientX, e.clientY); }
+function bbOnPointerUp(){
+  window.removeEventListener('pointermove', bbOnPointerMove);
+  window.removeEventListener('pointerup', bbOnPointerUp);
+  document.querySelectorAll('.bb-cell.preview-ok,.bb-cell.preview-bad').forEach(c=>c.classList.remove('preview-ok','preview-bad'));
+  const state = bbDragState;
+  bbDragState = null;
+  if(!state) return;
+  state.ghost.remove();
+  if(state.lastTarget){
+    const { r0, c0 } = state.lastTarget;
+    state.piece.shape.forEach(([dr,dc])=>{ bbBoard[r0+dr][c0+dc] = state.piece.color; });
+    bbScore += state.piece.shape.length;
+    const cleared = bbClearLines();
+    if(cleared > 0) bbScore += cleared * 10;
+    bbTray[state.trayIndex].used = true;
+    bbRenderBoard();
+    bbRenderScore();
+    bbRenderTray();
+    if(bbTray.every(p=>p.used)) bbGenerateTray();
+    bbRenderTray();
+    bbCheckGameOver();
+  }
+}
+function bbCheckGameOver(){
+  const active = bbTray.filter(p=>!p.used);
+  if(active.length === 0) return;
+  const stuck = active.every(p=>!bbCanPlaceAnywhere(p.shape));
+  if(stuck){
+    bbSaveBest();
+    bbRenderScore();
+    const finalEl = document.getElementById('bbFinalScore');
+    if(finalEl) finalEl.textContent = t('bbFinalScoreText').replace('{score}', bbScore).replace('{best}', bbBest);
+    const go = document.getElementById('bbGameOver');
+    if(go) go.style.display = 'flex';
+  }
+}
+function bbInit(){
+  if(bbInited) return;
+  bbInited = true;
+  bbNewGame();
+  document.getElementById('bbRestartBtn').addEventListener('click', ()=>bbNewGame());
+  document.getElementById('bbPlayAgainBtn').addEventListener('click', ()=>bbNewGame());
+}
+
 function isAbsentDayKey(key){ const s = getDayStatus(key); return s === 'krank' || s === 'urlaub' || s === 'schule'; }
 function isWorkDayKey(key){
   const d = new Date(key+'T00:00:00');
@@ -3952,13 +4276,9 @@ function streakSubText(n){
 }
 function renderStreakModal(){
   const { current, best } = computeStreakStats();
-  const at = activeTasks();
-  const today = todayStr();
-  const doneToday = at.filter(tk=>tk.completedAt && todayStr(new Date(tk.completedAt))===today).length;
   document.getElementById('streakBigNum').textContent = current;
   document.getElementById('streakBigSub').textContent = streakSubText(current);
   document.getElementById('streakBestNum').textContent = best;
-  document.getElementById('streakTodayNum').textContent = doneToday;
 }
 document.getElementById('streakBtn').addEventListener('click', ()=>{
   const ov = document.getElementById('streakOverlay');
@@ -3977,6 +4297,7 @@ function initApp(){
   checkPostfachTriggers();
   renderPostfachBadge();
   renderStreakBadge();
+  renderNotesQuickBadge();
   applyProfilePhoto();
   ensureFirstUseDate();
   setupAutocompletes();
